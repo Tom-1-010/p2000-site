@@ -6,7 +6,7 @@
     <meta name="description" content="Buurtnieuws van De Buurtwacht toont lokale berichten uit Maassluis en omgeving." />
     <title>Buurtnieuws - De Buurtwacht</title>
     <link rel="stylesheet" href="styles.css?v=20260617-clean-1" />
-    <link rel="stylesheet" href="news.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="news.css?v=20260617-ad-1" />
     <link rel="stylesheet" href="clean-ui.css?v=20260617-clean-1" />
     <link rel="stylesheet" href="app-theme.css?v=20260617-app-1" />
   </head>
@@ -90,6 +90,44 @@
 
     <script src="app.js?v=20260617-clean-1"></script>
     <script src="news.js?v=20260617-rss-3"></script>
+    <script>
+      (() => {
+        const text = (root, selector) => root.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() || '';
+        const meta = (card) => [...card.querySelectorAll('.news-item-meta span')].map((item) => item.textContent?.replace(/\s+/g, ' ').trim()).filter(Boolean);
+        const makeLocalLink = (data) => {
+          const params = new URLSearchParams(data);
+          return `nieuwsbericht.html?${params.toString()}`;
+        };
+
+        function updateLinks() {
+          document.querySelectorAll('#topStoryCard, #newsList .news-item').forEach((card) => {
+            const link = card.querySelector('a[href^="http"]');
+            if (!link || link.dataset.localPreview === '1') return;
+
+            const values = meta(card);
+            const feed = text(card, '.news-item-source') || text(card, '.news-tag') || 'Nieuws';
+            const source = values[0] || feed;
+            const original = link.href;
+
+            link.href = makeLocalLink({
+              title: text(card, 'h3') || text(card, 'h2') || 'Nieuwsbericht',
+              desc: text(card, 'p'),
+              source,
+              feed,
+              date: values.at(-1) || '',
+              url: original,
+            });
+            link.dataset.localPreview = '1';
+            link.removeAttribute('target');
+            link.removeAttribute('rel');
+            if (link.textContent.trim() === 'Lees bij bron') link.textContent = 'Open bericht';
+          });
+        }
+
+        new MutationObserver(updateLinks).observe(document.body, { childList: true, subtree: true });
+        updateLinks();
+      })();
+    </script>
     <script src="clean-copy.js?v=20260617-no-live-1"></script>
   </body>
 </html>
