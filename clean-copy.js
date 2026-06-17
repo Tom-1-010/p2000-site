@@ -7,6 +7,12 @@
     element.textContent = to;
   }
 
+  function setShortText(selector, to) {
+    const element = document.querySelector(selector);
+    if (!element || element.textContent.trim() === to) return;
+    element.textContent = to;
+  }
+
   function hideExtraItems(listSelector, itemSelector) {
     const list = document.querySelector(listSelector);
     if (!list) return;
@@ -49,10 +55,46 @@
     );
   }
 
+  function cleanWeatherCopy() {
+    if (document.body.dataset.page !== 'buurtweer') return;
+
+    setText('#currentDetails', 'De actuele verwachting voor Maassluis wordt opgehaald.', 'Weer ophalen.');
+    setText('#rainTimerText', 'We controleren de komende 12 uur voor Maassluis.', 'Komende 12 uur.');
+    setText('#weatherAttentionText', 'Bij zware buien, onweer of harde wind tonen we hier een korte waarschuwing.', 'Geen waarschuwing.');
+    setText('#adviceText', 'We bepalen of een jas, paraplu of extra opletten nodig is.', 'Advies ophalen.');
+
+    const todayText = document.querySelector('#todayText');
+    if (todayText?.textContent.includes('Vandaag ongeveer')) {
+      todayText.textContent = todayText.textContent
+        .replace('Vandaag ongeveer ', 'Max ')
+        .replace('Regenkans tot ', 'Regen ')
+        .replace('Wind ', 'Wind ')
+        .replace(' uit ', ' ');
+    }
+
+    const attentionText = document.querySelector('#weatherAttentionText');
+    if (attentionText) {
+      if (attentionText.textContent.includes('Geen zware buien')) setShortText('#weatherAttentionText', 'Geen waarschuwing.');
+      if (attentionText.textContent.includes('Er is later duidelijke kans')) setShortText('#weatherAttentionText', 'Later kans op regen.');
+      if (attentionText.textContent.includes('Houd buitenactiviteiten')) setShortText('#weatherAttentionText', 'Let op buiten.');
+    }
+
+    const adviceText = document.querySelector('#adviceText');
+    if (adviceText) {
+      if (adviceText.textContent.includes('Geen grote bijzonderheden')) setShortText('#adviceText', 'Geen bijzonderheden.');
+      if (adviceText.textContent.includes('Prima om naar buiten')) setShortText('#adviceText', 'Voorlopig droog.');
+      if (adviceText.textContent.includes('Er is nu of zeer binnenkort')) setShortText('#adviceText', 'Neem regen mee.');
+      if (adviceText.textContent.includes('Op open stukken')) setShortText('#adviceText', 'Veel wind buiten.');
+      if (adviceText.textContent.includes('Het voelt fris')) setShortText('#adviceText', 'Jas verstandig.');
+      if (adviceText.textContent.includes('Blijf alert')) setShortText('#adviceText', 'Let op onweer.');
+    }
+  }
+
   function applyCleanCopy() {
     cleanErrorText();
     cleanLoadingLabels();
     cleanLiveLabels();
+    cleanWeatherCopy();
     hideExtraItems('#newsList', '.news-item');
     hideExtraItems('#worksList', '.works-item');
   }
