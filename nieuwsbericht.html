@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Bekijk een korte samenvatting van een lokaal nieuwsbericht voordat je verdergaat naar de bron." />
+    <title>Nieuwsbericht - De Buurtwacht</title>
+    <link rel="stylesheet" href="styles.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="news.css?v=20260617-ad-1" />
+    <link rel="stylesheet" href="clean-ui.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="app-theme.css?v=20260617-app-1" />
+  </head>
+  <body data-page="buurtnieuws" class="news-article-body">
+    <header class="app-header">
+      <nav class="appbar" aria-label="Hoofdnavigatie">
+        <a class="wordmark" href="index.html" aria-label="De Buurtwacht startpagina">
+          <span class="wordmark-de">De</span>
+          <span class="wordmark-name">Buurtwacht</span>
+        </a>
+        <a class="location-pill" href="mijnbuurt.html" aria-label="Mijn buurt instellen">
+          <span class="location-dot"></span>
+          Maassluis
+        </a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="article-gate page-width" aria-labelledby="articleTitle">
+        <div class="article-gate-main">
+          <aside class="article-ad-card" aria-label="Advertentie">
+            <div class="ad-label-row">
+              <span class="small-label">Advertentie</span>
+              <span>Fictief voorbeeld</span>
+            </div>
+            <strong>Lokale advertentieruimte</strong>
+            <p>Hier kan straks een subtiele advertentie komen van een lokale ondernemer, dienst of sponsor uit de buurt.</p>
+            <div class="ad-placeholder-line"></div>
+          </aside>
+
+          <article class="article-preview-card">
+            <a class="back-link" href="buurtnieuws.html">Terug naar Buurtnieuws</a>
+            <span class="small-label">Bronnieuws</span>
+            <h1 id="articleTitle">Nieuwsbericht laden</h1>
+            <p id="articleDescription">We halen de korte samenvatting van dit bericht op.</p>
+
+            <div class="article-meta-row" aria-label="Berichtgegevens">
+              <span id="articleFeed">Nieuws</span>
+              <span id="articleSource">Bron onbekend</span>
+              <span id="articleDate">Tijd onbekend</span>
+            </div>
+
+            <div class="article-actions">
+              <a id="sourceLink" class="source-button" href="buurtnieuws.html" target="_blank" rel="noopener noreferrer">Lees verder bij bron</a>
+              <small>Je verlaat De Buurtwacht en opent de originele nieuwssite.</small>
+            </div>
+          </article>
+        </div>
+
+        <aside class="source-info-card" aria-label="Broninformatie">
+          <span class="small-label">Bron</span>
+          <strong id="sourceName">Nieuwsbron</strong>
+          <p>De Buurtwacht toont een korte tussenweergave. Het volledige artikel staat bij de oorspronkelijke bron.</p>
+          <a id="compactSourceLink" href="buurtnieuws.html" target="_blank" rel="noopener noreferrer">Naar bron</a>
+        </aside>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Hoofdmenu">
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="Mijn buurt"><span class="nav-icon icon-house" aria-hidden="true"></span><span>Buurt</span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span><span>Nieuws</span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span><span>Meldingen</span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span><span>Weer</span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Werkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span><span>Werk</span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span><span>Tips</span></a>
+    </nav>
+
+    <script src="app.js?v=20260617-clean-1"></script>
+    <script>
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const fallbackUrl = 'buurtnieuws.html';
+        const rawUrl = params.get('url') || fallbackUrl;
+
+        function getSafeUrl(value) {
+          try {
+            const parsed = new URL(value, window.location.href);
+            if (parsed.protocol === 'http:' || parsed.protocol === 'https:') return parsed.href;
+          } catch (error) {
+            return fallbackUrl;
+          }
+
+          return fallbackUrl;
+        }
+
+        function formatDate(value) {
+          if (!value) return 'Tijd onbekend';
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return 'Tijd onbekend';
+
+          return date.toLocaleDateString('nl-NL', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+        }
+
+        function setText(selector, value) {
+          const element = document.querySelector(selector);
+          if (element) element.textContent = value;
+        }
+
+        const targetUrl = getSafeUrl(rawUrl);
+        const title = params.get('title') || 'Nieuwsbericht';
+        const description = params.get('desc') || 'Open de originele bron om het volledige bericht te lezen.';
+        const source = params.get('source') || 'Bron onbekend';
+        const feed = params.get('feed') || 'Nieuws';
+        const date = formatDate(params.get('date'));
+
+        setText('#articleTitle', title);
+        setText('#articleDescription', description);
+        setText('#articleFeed', feed);
+        setText('#articleSource', source);
+        setText('#articleDate', date);
+        setText('#sourceName', source);
+
+        ['#sourceLink', '#compactSourceLink'].forEach((selector) => {
+          const link = document.querySelector(selector);
+          if (!link) return;
+          link.href = targetUrl;
+          if (targetUrl === fallbackUrl) {
+            link.removeAttribute('target');
+            link.removeAttribute('rel');
+            link.textContent = 'Terug naar nieuws';
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
