@@ -99,30 +99,55 @@
           return `nieuwsbericht.html?${params.toString()}`;
         };
 
+        function isExternalNewsLink(link) {
+          if (!link) return false;
+          if (link.href.includes('nieuwsbericht.html')) return false;
+          try {
+            const parsed = new URL(link.href, window.location.href);
+            return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+          } catch (error) {
+            return false;
+          }
+        }
+
+        function makeCardLink(card, link) {
+          const values = meta(card);
+          const feed = text(card, '.news-item-source') || text(card, '.news-tag') || 'Nieuws';
+          const source = values[0] || feed;
+
+          return makeLocalLink({
+            title: text(card, 'h3') || text(card, 'h2') || 'Nieuwsbericht',
+            desc: text(card, 'p'),
+            source,
+            feed,
+            date: values.at(-1) || '',
+            url: link.href,
+          });
+        }
+
         function updateLinks() {
           document.querySelectorAll('#topStoryCard, #newsList .news-item').forEach((card) => {
-            const link = card.querySelector('a[href^="http"]');
-            if (!link || link.dataset.localPreview === '1') return;
+            const link = card.querySelector('a[href]');
+            if (!isExternalNewsLink(link) || link.dataset.localPreview === '1') return;
 
-            const values = meta(card);
-            const feed = text(card, '.news-item-source') || text(card, '.news-tag') || 'Nieuws';
-            const source = values[0] || feed;
-            const original = link.href;
-
-            link.href = makeLocalLink({
-              title: text(card, 'h3') || text(card, 'h2') || 'Nieuwsbericht',
-              desc: text(card, 'p'),
-              source,
-              feed,
-              date: values.at(-1) || '',
-              url: original,
-            });
+            link.href = makeCardLink(card, link);
             link.dataset.localPreview = '1';
             link.removeAttribute('target');
             link.removeAttribute('rel');
             if (link.textContent.trim() === 'Lees bij bron') link.textContent = 'Open bericht';
           });
         }
+
+        document.addEventListener('click', (event) => {
+          const link = event.target.closest('#topStoryCard a[href], #newsList .news-item a[href]');
+          if (!isExternalNewsLink(link)) return;
+
+          const card = link.closest('#topStoryCard, .news-item');
+          if (!card) return;
+
+          event.preventDefault();
+          window.location.href = makeCardLink(card, link);
+        }, true);
 
         new MutationObserver(updateLinks).observe(document.body, { childList: true, subtree: true });
         updateLinks();
