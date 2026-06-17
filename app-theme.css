@@ -1,0 +1,214 @@
+:root {
+  --app-sky: #65c1ff;
+  --app-sky-2: #77b8ea;
+  --app-navy: #073060;
+  --app-card: rgba(255, 255, 255, .94);
+  --app-line: rgba(255, 255, 255, .82);
+  --app-shadow: 0 14px 34px rgba(6, 46, 90, .16);
+}
+
+body:not([data-page="buurtweer"]) {
+  min-height: 100vh;
+  padding-bottom: 138px;
+  color: var(--app-navy);
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 225, 31, .42) 0 76px, transparent 78px),
+    radial-gradient(circle at 86% 18%, rgba(255,255,255,.36) 0 72px, transparent 74px),
+    linear-gradient(180deg, var(--app-sky) 0%, var(--app-sky-2) 42%, #eaf4fb 100%);
+}
+
+body:not([data-page="buurtweer"]) .app-header {
+  background: rgba(255,255,255,.72);
+  border-bottom: 1px solid rgba(255,255,255,.72);
+  backdrop-filter: blur(16px);
+}
+
+body:not([data-page="buurtweer"]) .appbar {
+  min-height: 58px;
+}
+
+body:not([data-page="buurtweer"]) .wordmark-de,
+body:not([data-page="buurtweer"]) .wordmark-name,
+body:not([data-page="buurtweer"]) h1,
+body:not([data-page="buurtweer"]) h2,
+body:not([data-page="buurtweer"]) strong {
+  color: var(--app-navy);
+}
+
+body:not([data-page="buurtweer"]) .page-width {
+  width: min(1080px, calc(100vw - 22px));
+}
+
+body:not([data-page="buurtweer"]) main {
+  padding-top: 12px;
+}
+
+body:not([data-page="buurtweer"]) .app-hero,
+body:not([data-page="buurtweer"]) .page-hero,
+body:not([data-page="buurtweer"]) .news-shell,
+body:not([data-page="buurtweer"]) .works-shell {
+  padding-top: 0;
+}
+
+body:not([data-page="buurtweer"]) .hero-panel,
+body:not([data-page="buurtweer"]) .phone-card,
+body:not([data-page="buurtweer"]) .page-panel,
+body:not([data-page="buurtweer"]) .quick-card,
+body:not([data-page="buurtweer"]) .today-card,
+body:not([data-page="buurtweer"]) .list-card,
+body:not([data-page="buurtweer"]) .news-hero,
+body:not([data-page="buurtweer"]) .works-hero,
+body:not([data-page="buurtweer"]) .news-tools,
+body:not([data-page="buurtweer"]) .works-tools,
+body:not([data-page="buurtweer"]) .news-highlight,
+body:not([data-page="buurtweer"]) .works-highlight,
+body:not([data-page="buurtweer"]) .news-feed-section,
+body:not([data-page="buurtweer"]) .works-feed-section,
+body:not([data-page="buurtweer"]) .news-item,
+body:not([data-page="buurtweer"]) .works-item {
+  background: var(--app-card);
+  border: 1px solid var(--app-line);
+  border-radius: 23px;
+  box-shadow: var(--app-shadow);
+  backdrop-filter: blur(12px);
+}
+
+body:not([data-page="buurtweer"]) .hero-panel,
+body:not([data-page="buurtweer"]) .page-panel,
+body:not([data-page="buurtweer"]) .news-hero,
+body:not([data-page="buurtweer"]) .works-hero {
+  overflow: hidden;
+  border-left: 0;
+}
+
+body:not([data-page="buurtweer"]) .hero-panel,
+body:not([data-page="buurtweer"]) .page-panel {
+  position: relative;
+  padding: 20px;
+}
+
+body:not([data-page="buurtweer"]) .hero-panel::after,
+body:not([data-page="buurtweer"]) .page-panel::after,
+body:not([data-page="buurtweer"]) .news-hero::after,
+body:not([data-page="buurtweer"]) .works-hero::after {
+  content: "";
+  position: absolute;
+  right: -74px;
+  bottom: -92px;
+  width: 220px;
+  height: 220px;
+  pointer-events: none;
+  background: rgba(101,193,255,.16);
+  border-radius: 50%;
+}
+
+body:not([data-page="buurtweer"]) .eyebrow,
+body:not([data-page="buurtweer"]) .label,
+body:not([data-page="buurtweer"]) .small-label,
+body:not([data-page="buurtweer"]) .card-header-row span,
+body:not([data-page="buurtweer"]) .section-title-row span {
+  color: #0b64d8;
+  font-weight: 950;
+}
+
+body:not([data-page="buurtweer"]) .hero-lead,
+body:not([data-page="buurtweer"]) .page-panel p:not(.label),
+body:not([data-page="buurtweer"]) .news-hero-copy p:not(.eyebrow),
+body:not([data-page="buurtweer"]) .works-hero-copy p:not(.eyebrow),
+body:not([data-page="buurtweer"]) .list-card p,
+body:not([data-page="buurtweer"]) .quick-card p,
+body:not([data-page="buurtweer"]) .today-card p,
+body:not([data-page="buurtweer"]) .news-item p,
+body:not([data-page="buurtweer"]) .works-item p {
+  color: #385b80;
+}
+
+body:not([data-page="buurtweer"]) .location-pill,
+body:not([data-page="buurtweer"]) .search-card,
+body:not([data-page="buurtweer"]) .home-status-card,
+body:not([data-page="buurtweer"]) .mini-feed article,
+body:not([data-page="buurtweer"]) .news-status-card,
+body:not([data-page="buurtweer"]) .works-status-card {
+  background: rgba(255,255,255,.72);
+  border-color: rgba(255,255,255,.82);
+  border-radius: 17px;
+}
+
+body:not([data-page="buurtweer"]) .quick-actions,
+body:not([data-page="buurtweer"]) .today-section,
+body:not([data-page="buurtweer"]) .settings-list,
+body:not([data-page="buurtweer"]) .tips-list,
+body:not([data-page="buurtweer"]) .alert-list {
+  padding-bottom: 46px;
+}
+
+body:not([data-page="buurtweer"]) .feature-icon,
+body:not([data-page="buurtweer"]) .nav-icon,
+body:not([data-page="buurtweer"]) .search-icon,
+body:not([data-page="buurtweer"]) .big-icon {
+  color: #102f85;
+}
+
+.bottom-nav {
+  max-width: min(540px, calc(100vw - 24px));
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 21px;
+  box-shadow: 0 18px 46px rgba(10,40,78,.2);
+  backdrop-filter: blur(16px);
+}
+
+.bottom-nav a {
+  min-height: 52px;
+  color: #6f7a88;
+  text-align: center;
+}
+
+.bottom-nav a.active {
+  color: #102f85;
+  background: #dfeeff;
+}
+
+body[data-page="buurtwerkzaamheden"] .bottom-nav a.active {
+  color: #102f85;
+  background: #dfeeff;
+}
+
+@media (max-width: 760px) {
+  body:not([data-page="buurtweer"]) .app-hero,
+  body:not([data-page="buurtweer"]) .news-hero,
+  body:not([data-page="buurtweer"]) .works-hero {
+    grid-template-columns: 1fr;
+  }
+
+  body:not([data-page="buurtweer"]) .quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body:not([data-page="buurtweer"]) .today-grid,
+  body:not([data-page="buurtweer"]) .content-grid,
+  body:not([data-page="buurtweer"]) .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  body:not([data-page="buurtweer"]) .page-width {
+    width: min(100%, calc(100vw - 18px));
+  }
+
+  body:not([data-page="buurtweer"]) h1 {
+    font-size: clamp(28px, 9vw, 38px);
+  }
+
+  body:not([data-page="buurtweer"]) .wordmark-de,
+  body:not([data-page="buurtweer"]) .wordmark-name {
+    font-size: 22px;
+  }
+
+  .bottom-nav {
+    left: 10px;
+    right: 10px;
+    max-width: calc(100vw - 20px);
+  }
+}
