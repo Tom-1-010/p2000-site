@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Buurtwerkzaamheden van De Buurtwacht toont werkzaamheden, verkeershinder en gemeentelijke bekendmakingen voor Maassluis." />
     <title>Buurtwerkzaamheden - De Buurtwacht</title>
-    <link rel="stylesheet" href="styles.css?v=20260617-basis" />
-    <link rel="stylesheet" href="works.css?v=20260617-rss-1" />
+    <link rel="stylesheet" href="styles.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="works.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="clean-ui.css?v=20260617-clean-1" />
   </head>
   <body data-page="buurtwerkzaamheden">
     <header class="app-header">
@@ -28,12 +29,12 @@
           <div class="works-hero-copy">
             <p class="eyebrow dark">Buurtwerkzaamheden</p>
             <h1 id="works-title">Werkzaamheden en bekendmakingen</h1>
-            <p>Alleen gemeentelijke updates over werkzaamheden, verkeer, vergunningen en officiële bekendmakingen in Maassluis.</p>
+            <p>Gemeentelijke updates over werkzaamheden, verkeer, vergunningen en officiële bekendmakingen in Maassluis.</p>
           </div>
           <div class="works-status-card" aria-live="polite">
             <span class="small-label">Status</span>
-            <strong id="worksStatus">RSS laden</strong>
-            <p id="worksUpdated">Gemeentelijke feeds worden opgehaald.</p>
+            <strong id="worksStatus">Updates laden</strong>
+            <p id="worksUpdated">Gemeentelijke berichten worden opgehaald.</p>
           </div>
         </section>
 
@@ -53,7 +54,7 @@
           <article class="works-highlight" id="topWorkCard">
             <span class="small-label">Meest relevant</span>
             <h2>Nog geen update geladen</h2>
-            <p>De RSS-feeds worden opgehaald. Zodra er informatie binnenkomt, verschijnt de meest relevante update hier.</p>
+            <p>Zodra er informatie binnenkomt, verschijnt de meest relevante update hier.</p>
           </article>
 
           <aside class="works-summary-grid" aria-label="Samenvatting">
@@ -68,7 +69,7 @@
               <small>actief</small>
             </article>
             <article>
-              <span>Laatste update</span>
+              <span>Update</span>
               <strong id="worksLastUpdate">--:--</strong>
               <small>lokaal</small>
             </article>
@@ -90,28 +91,19 @@
             <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
           </div>
         </section>
-
-        <section class="works-source-panel" aria-label="Gebruikte bronnen">
-          <div>
-            <span class="small-label">Bronnen</span>
-            <h2>Gemeentelijke RSS-zoekfeeds</h2>
-            <p>Deze pagina haalt alleen informatie op over werkzaamheden/verkeer en bekendmakingen/vergunningen voor Maassluis. Eerst via RSS2JSON, daarna via XML-proxy fallback.</p>
-          </div>
-          <ul id="worksSourceList" class="works-source-list"></ul>
-        </section>
       </section>
     </main>
 
-    <nav class="bottom-nav" aria-label="Buurtmenu">
-      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a>
-      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a>
-      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a>
-      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a>
-      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a>
-      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a>
+    <nav class="bottom-nav" aria-label="Hoofdmenu">
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="Mijn buurt"><span class="nav-icon icon-house" aria-hidden="true"></span><span>Buurt</span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span><span>Nieuws</span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span><span>Meldingen</span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span><span>Weer</span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Werkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span><span>Werk</span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span><span>Tips</span></a>
     </nav>
 
-    <script src="app.js?v=20260617-basis"></script>
+    <script src="app.js?v=20260617-clean-1"></script>
     <script src="works.js?v=20260617-rss-1"></script>
   </body>
 </html>
