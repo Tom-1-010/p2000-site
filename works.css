@@ -37,15 +37,13 @@
 .works-item.is-featured,
 .works-list > .works-item:first-child:not(.skeleton-works) {
   position: relative;
-  padding: 20px !important;
+  padding: 17px !important;
   overflow: hidden;
-  border: 3px solid #34acfc !important;
-  border-left: 10px solid #102f85 !important;
-  background:
-    radial-gradient(circle at 92% 12%, rgba(52, 172, 252, .32) 0 78px, transparent 80px),
-    linear-gradient(180deg, #dff3ff, #ffffff) !important;
-  box-shadow: 0 24px 52px rgba(6, 46, 90, .28) !important;
-  transform: translateY(-1px);
+  border: 1px solid rgba(52, 172, 252, .36) !important;
+  border-left: 5px solid rgba(52, 172, 252, .76) !important;
+  background: linear-gradient(180deg, rgba(239, 249, 255, .94), rgba(255,255,255,.96)) !important;
+  box-shadow: 0 13px 30px rgba(6, 46, 90, .13) !important;
+  transform: none;
 }
 
 .works-item.is-featured::before,
@@ -56,16 +54,16 @@
 .works-latest-label {
   display: inline-flex;
   width: max-content;
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  color: #fff;
-  background: #102f85;
-  border: 1px solid #102f85;
+  margin-bottom: 9px;
+  padding: 6px 10px;
+  color: #0b64d8;
+  background: rgba(223, 238, 255, .78);
+  border: 1px solid rgba(52, 172, 252, .24);
   border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(7, 42, 86, .2);
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: .04em;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .035em;
   text-transform: uppercase;
 }
 
@@ -74,15 +72,15 @@
   display: inline-flex;
   width: max-content;
   grid-column: 1 / -1;
-  margin-bottom: 9px;
-  padding: 8px 12px;
-  color: #fff;
-  background: #102f85;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  color: #0b64d8;
+  background: rgba(223, 238, 255, .78);
+  border: 1px solid rgba(52, 172, 252, .24);
   border-radius: 999px;
-  box-shadow: 0 8px 18px rgba(7, 42, 86, .2);
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: .04em;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .035em;
   text-transform: uppercase;
 }
 
@@ -94,33 +92,33 @@
 .works-item.is-featured .works-item-source,
 .works-list > .works-item:first-child:not(.skeleton-works) .works-item-source {
   color: #0b64d8 !important;
-  font-weight: 950 !important;
+  font-weight: 900 !important;
 }
 
 .works-item.is-featured h3,
 .works-list > .works-item:first-child:not(.skeleton-works) h3 {
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .works-item.is-featured h3 a,
 .works-list > .works-item:first-child:not(.skeleton-works) h3 a {
   color: #073060 !important;
-  font-size: 1.24em !important;
-  line-height: 1.08 !important;
+  font-size: 1.08em !important;
+  line-height: 1.13 !important;
 }
 
 .works-item.is-featured p,
 .works-list > .works-item:first-child:not(.skeleton-works) p {
-  color: #1f4469 !important;
-  font-size: 15px !important;
-  line-height: 1.42 !important;
+  color: #385b80 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
 }
 
 .works-item.is-featured .works-item-meta,
 .works-list > .works-item:first-child:not(.skeleton-works) .works-item-meta {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(8, 48, 96, .13);
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(8, 48, 96, .08);
 }
 
 .works-tag.hot {
@@ -131,10 +129,10 @@
 
 .works-item.is-featured .works-tag.hot,
 .works-list > .works-item:first-child:not(.skeleton-works) .works-tag {
-  color: #fff !important;
-  background: #34acfc !important;
-  border-color: #34acfc !important;
-  box-shadow: 0 8px 18px rgba(52, 172, 252, .28);
+  color: #0b64d8 !important;
+  background: rgba(223, 238, 255, .82) !important;
+  border-color: rgba(52, 172, 252, .28) !important;
+  box-shadow: none;
 }
 
 .works-pagination {
@@ -185,19 +183,19 @@
 
   .works-item.is-featured,
   .works-list > .works-item:first-child:not(.skeleton-works) {
-    padding: 17px !important;
-    border-left-width: 8px !important;
+    padding: 15px !important;
+    border-left-width: 4px !important;
   }
 
   .works-latest-label,
   .works-list > .works-item:first-child:not(.skeleton-works) .works-item-header::before {
-    padding: 7px 10px;
-    font-size: 11px;
+    padding: 5px 9px;
+    font-size: 10px;
   }
 
   .works-item.is-featured h3 a,
   .works-list > .works-item:first-child:not(.skeleton-works) h3 a {
-    font-size: 1.13em !important;
+    font-size: 1.04em !important;
   }
 
   .works-page-button {
