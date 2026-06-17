@@ -7,32 +7,30 @@
     <title>De Buurtwacht - Alles voor jouw buurt</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page="home">
     <header class="site-header">
       <nav class="navbar" aria-label="Hoofdnavigatie">
-        <a class="brand" href="#home" aria-label="De Buurtwacht startpagina">
+        <a class="brand" href="index.html" aria-label="De Buurtwacht startpagina">
           <span class="brand-mark">DB</span>
           <span>
             <strong>De Buurtwacht</strong>
             <small>alles voor jouw buurt</small>
           </span>
         </a>
-        <a class="header-action" href="#buurtmeldingen">Bekijk buurtmeldingen</a>
+        <a class="header-action" href="buurtmeldingen.html">Bekijk buurtmeldingen</a>
       </nav>
     </header>
 
-    <main id="home">
+    <main>
       <section class="hero-section">
         <div class="hero-grid page-width">
           <div class="hero-copy">
             <p class="label">Jouw buurt in één overzicht</p>
             <h1>Weet wat er speelt rondom jouw straat.</h1>
-            <p class="hero-text">
-              De Buurtwacht brengt buurtinformatie samen: lokaal nieuws, meldingen, weer, werkzaamheden en praktische tips. Rustig, overzichtelijk en gemaakt voor mobiel gebruik.
-            </p>
+            <p class="hero-text">De Buurtwacht brengt buurtinformatie samen: lokaal nieuws, meldingen, weer, werkzaamheden en praktische tips. Rustig, overzichtelijk en gemaakt voor mobiel gebruik.</p>
             <div class="hero-actions">
-              <a class="button primary" href="#mijnbuurt">Open MijnBuurt</a>
-              <a class="button secondary" href="#buurttips">Bekijk tips</a>
+              <a class="button primary" href="mijnbuurt.html">Open MijnBuurt</a>
+              <a class="button secondary" href="buurttips.html">Bekijk tips</a>
             </div>
           </div>
 
@@ -57,106 +55,79 @@
         </div>
       </section>
 
-      <section class="page-width feature-grid" id="mijnbuurt" aria-labelledby="features-title">
+      <section class="page-width feature-grid" aria-labelledby="features-title">
         <div class="section-heading-center">
           <p class="label">Startpagina</p>
           <h2 id="features-title">Alles wat je buurt nodig heeft</h2>
-          <p>Kies snel wat je wilt bekijken. Deze homepage is de basis voor het buurtplatform.</p>
+          <p>Kies snel wat je wilt bekijken. Elk onderdeel opent nu als eigen pagina.</p>
         </div>
 
-        <a class="feature-card highlight" href="#mijnbuurt">
-          <span class="feature-icon" aria-hidden="true">⌂</span>
+        <a class="feature-card highlight" href="mijnbuurt.html">
+          <span class="feature-icon icon-house" aria-hidden="true"></span>
           <span class="feature-kicker">MijnBuurt</span>
           <strong>Persoonlijk buurtbeeld</strong>
           <p>Bekijk relevante updates voor jouw straat, wijk of woonplaats.</p>
         </a>
 
-        <a class="feature-card" href="#buurtnieuws" id="buurtnieuws">
-          <span class="feature-icon" aria-hidden="true">◧</span>
+        <a class="feature-card" href="buurtnieuws.html">
+          <span class="feature-icon icon-news" aria-hidden="true"></span>
           <span class="feature-kicker">Buurtnieuws</span>
           <strong>Laatste lokale berichten</strong>
           <p>Nieuws uit de directe omgeving, zonder ruis van buiten de buurt.</p>
         </a>
 
-        <a class="feature-card" href="#buurtmeldingen" id="buurtmeldingen">
-          <span class="feature-icon" aria-hidden="true">!</span>
+        <a class="feature-card" href="buurtmeldingen.html">
+          <span class="feature-icon icon-bell" aria-hidden="true"></span>
           <span class="feature-kicker">Buurtmeldingen</span>
           <strong>Meldingen dichtbij</strong>
           <p>Een rustige plek voor meldingen die bewoners kunnen helpen opletten.</p>
         </a>
 
-        <a class="feature-card" href="#buurtweer" id="buurtweer">
-          <span class="feature-icon" aria-hidden="true">☁</span>
+        <a class="feature-card" href="buurtweer.html">
+          <span class="feature-icon icon-weather" aria-hidden="true"></span>
           <span class="feature-kicker">Buurtweer</span>
           <strong>Weer voor jouw wijk</strong>
           <p>Praktische weersinformatie voor fietsen, wandelen, school en werk.</p>
         </a>
 
-        <a class="feature-card" href="#buurtwerkzaamheden" id="buurtwerkzaamheden">
-          <span class="feature-icon" aria-hidden="true">◇</span>
+        <a class="feature-card" href="buurtwerkzaamheden.html">
+          <span class="feature-icon icon-work" aria-hidden="true"></span>
           <span class="feature-kicker">Buurtwerkzaamheden</span>
           <strong>Werkzaamheden en hinder</strong>
           <p>Wegafsluitingen, omleidingen, onderhoud en geplande werkzaamheden.</p>
         </a>
 
-        <a class="feature-card" href="#buurttips" id="buurttips">
-          <span class="feature-icon" aria-hidden="true">✓</span>
+        <a class="feature-card" href="buurttips.html">
+          <span class="feature-icon icon-tip" aria-hidden="true"></span>
           <span class="feature-kicker">Buurttips</span>
           <strong>Handige tips voor bewoners</strong>
           <p>Veiligheid, afval, parkeren, buurtpreventie en praktische hulp.</p>
         </a>
-      </section>
-
-      <section class="page-width dashboard-section" aria-labelledby="dashboard-title">
-        <div class="dashboard-card main-card">
-          <p class="label">Uitgelicht</p>
-          <h2 id="dashboard-title">Rustige informatie, snel te begrijpen.</h2>
-          <p>
-            De Buurtwacht is bedoeld als laagdrempelig platform voor bewoners. Geen drukke alarmstijl, maar duidelijke blokken die helpen om snel te zien wat belangrijk is.
-          </p>
-        </div>
-        <div class="dashboard-list" aria-label="Voorbeeld updates">
-          <article>
-            <span>Vandaag</span>
-            <strong>Werkzaamheden aan hoofdroute</strong>
-            <p>Controleer je route als je door het centrum rijdt.</p>
-          </article>
-          <article>
-            <span>Tip</span>
-            <strong>Verlichting bij achterpaden</strong>
-            <p>Meld kapotte verlichting bij de gemeente of beheerder.</p>
-          </article>
-          <article>
-            <span>Weer</span>
-            <strong>Kans op stevige buien</strong>
-            <p>Zet losse spullen in tuin of balkon veilig weg.</p>
-          </article>
-        </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div class="page-width footer-grid">
         <div>
-          <a class="brand footer-brand" href="#home">
+          <a class="brand footer-brand" href="index.html">
             <span class="brand-mark">DB</span>
             <span>
               <strong>De Buurtwacht</strong>
               <small>alles voor jouw buurt</small>
             </span>
           </a>
-          <p>Een nette algemene homepage voor een buurtplatform. Verdere functies kunnen later per onderdeel worden uitgebouwd.</p>
+          <p>Een nette algemene homepage voor een buurtplatform. Verdere functies kunnen per onderdeel worden uitgebouwd.</p>
         </div>
       </div>
     </footer>
 
     <nav class="bottom-nav" aria-label="Buurtmenu">
-      <a href="#mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span aria-hidden="true">⌂</span></a>
-      <a href="#buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span aria-hidden="true">◧</span></a>
-      <a href="#buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span aria-hidden="true">!</span></a>
-      <a href="#buurtweer" aria-label="Buurtweer" title="Buurtweer"><span aria-hidden="true">☁</span></a>
-      <a href="#buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span aria-hidden="true">◇</span></a>
-      <a href="#buurttips" aria-label="Buurttips" title="Buurttips"><span aria-hidden="true">✓</span></a>
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a>
     </nav>
 
     <script src="app.js"></script>
