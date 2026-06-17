@@ -3,20 +3,115 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Buurtwerkzaamheden van De Buurtwacht toont werkzaamheden, verkeershinder en gemeentelijke bekendmakingen voor Maassluis." />
     <title>Buurtwerkzaamheden - De Buurtwacht</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260617-basis" />
+    <link rel="stylesheet" href="works.css?v=20260617-rss-1" />
   </head>
   <body data-page="buurtwerkzaamheden">
-    <header class="site-header"><nav class="navbar" aria-label="Hoofdnavigatie"><a class="brand" href="index.html"><span class="brand-mark">DB</span><span><strong>De Buurtwacht</strong><small>alles voor jouw buurt</small></span></a><a class="header-action" href="index.html">Terug naar home</a></nav></header>
+    <header class="app-header">
+      <nav class="appbar" aria-label="Hoofdnavigatie">
+        <a class="wordmark" href="index.html" aria-label="De Buurtwacht startpagina">
+          <span class="wordmark-de">De</span>
+          <span class="wordmark-name">Buurtwacht</span>
+        </a>
+        <a class="location-pill work-location-pill" href="mijnbuurt.html" aria-label="Mijn buurt instellen">
+          <span class="location-dot work-location-dot"></span>
+          Maassluis
+        </a>
+      </nav>
+    </header>
+
     <main>
-      <section class="page-hero page-width"><div class="page-panel"><span class="feature-icon icon-work" aria-hidden="true"></span><p class="label">Buurtwerkzaamheden</p><h1>Werkzaamheden en hinder overzichtelijk bij elkaar.</h1><p>Een eigen pagina voor afsluitingen, omleidingen, projecten en geplande werkzaamheden in de wijk.</p></div></section>
-      <section class="content-grid page-width">
-        <article class="info-card"><span>Routes</span><strong>Afsluitingen en omleidingen</strong><p>Laat bewoners snel zien waar tijdelijke hinder is.</p></article>
-        <article class="info-card"><span>Planning</span><strong>Werk in uitvoering</strong><p>Toon later startdatum, einddatum en locatie.</p></article>
-        <article class="info-card"><span>Buurt</span><strong>Wat merk je ervan?</strong><p>Maak duidelijk wat bewoners kunnen verwachten.</p></article>
+      <section class="works-shell page-width">
+        <section class="works-hero" aria-labelledby="works-title">
+          <div class="works-hero-copy">
+            <p class="eyebrow dark">Buurtwerkzaamheden</p>
+            <h1 id="works-title">Werkzaamheden en bekendmakingen</h1>
+            <p>Alleen gemeentelijke updates over werkzaamheden, verkeer, vergunningen en officiële bekendmakingen in Maassluis.</p>
+          </div>
+          <div class="works-status-card" aria-live="polite">
+            <span class="small-label">Status</span>
+            <strong id="worksStatus">RSS laden</strong>
+            <p id="worksUpdated">Gemeentelijke feeds worden opgehaald.</p>
+          </div>
+        </section>
+
+        <section class="works-tools" aria-label="Werkzaamheden zoeken en filteren">
+          <label class="works-search">
+            <span class="works-search-icon" aria-hidden="true"></span>
+            <input id="worksSearch" type="search" placeholder="Zoek op straat, wijk of onderwerp" autocomplete="off" />
+          </label>
+          <div class="works-filter-row" role="list" aria-label="Werkzaamhedenfilters">
+            <button class="works-filter active" type="button" data-filter="all">Alles</button>
+            <button class="works-filter" type="button" data-filter="werkzaamheden">Werkzaamheden</button>
+            <button class="works-filter" type="button" data-filter="bekendmakingen">Bekendmakingen</button>
+          </div>
+        </section>
+
+        <section class="works-dashboard" aria-label="Overzicht werkzaamheden">
+          <article class="works-highlight" id="topWorkCard">
+            <span class="small-label">Meest relevant</span>
+            <h2>Nog geen update geladen</h2>
+            <p>De RSS-feeds worden opgehaald. Zodra er informatie binnenkomt, verschijnt de meest relevante update hier.</p>
+          </article>
+
+          <aside class="works-summary-grid" aria-label="Samenvatting">
+            <article>
+              <span>Updates</span>
+              <strong id="worksCount">0</strong>
+              <small>geladen</small>
+            </article>
+            <article>
+              <span>Bronnen</span>
+              <strong id="worksSourceCount">0</strong>
+              <small>actief</small>
+            </article>
+            <article>
+              <span>Laatste update</span>
+              <strong id="worksLastUpdate">--:--</strong>
+              <small>lokaal</small>
+            </article>
+          </aside>
+        </section>
+
+        <section class="works-feed-section" aria-labelledby="works-feed-title">
+          <div class="section-title-row works-section-title">
+            <div>
+              <span class="small-label">Gemeente</span>
+              <h2 id="works-feed-title">Actuele werkzaamheden en bekendmakingen</h2>
+            </div>
+            <button id="refreshWorks" type="button" class="works-refresh">Ververs</button>
+          </div>
+
+          <div id="worksList" class="works-list" aria-live="polite">
+            <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
+            <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
+            <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
+          </div>
+        </section>
+
+        <section class="works-source-panel" aria-label="Gebruikte bronnen">
+          <div>
+            <span class="small-label">Bronnen</span>
+            <h2>Gemeentelijke RSS-zoekfeeds</h2>
+            <p>Deze pagina haalt alleen informatie op over werkzaamheden/verkeer en bekendmakingen/vergunningen voor Maassluis. Eerst via RSS2JSON, daarna via XML-proxy fallback.</p>
+          </div>
+          <ul id="worksSourceList" class="works-source-list"></ul>
+        </section>
       </section>
     </main>
-    <nav class="bottom-nav" aria-label="Buurtmenu"><a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a><a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a><a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a><a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a><a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a><a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a></nav>
-    <script src="app.js"></script>
+
+    <nav class="bottom-nav" aria-label="Buurtmenu">
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a>
+    </nav>
+
+    <script src="app.js?v=20260617-basis"></script>
+    <script src="works.js?v=20260617-rss-1"></script>
   </body>
 </html>
