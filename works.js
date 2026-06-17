@@ -1,4 +1,5 @@
 const MAX_WORK_ITEMS = 24;
+const WORK_PAGE_SIZE = 5;
 
 const WORK_FEEDS = [
   {
@@ -38,6 +39,7 @@ const worksState = {
   activeFilter: 'all',
   search: '',
   loading: false,
+  currentPage: 1,
 };
 
 const elements = {
@@ -49,6 +51,7 @@ const elements = {
   list: document.querySelector('#worksList'),
   topWork: document.querySelector('#topWorkCard'),
   sourceList: document.querySelector('#worksSourceList'),
+  pagination: document.querySelector('#worksPagination'),
   search: document.querySelector('#worksSearch'),
   refresh: document.querySelector('#refreshWorks'),
   filters: [...document.querySelectorAll('.works-filter')],
@@ -261,8 +264,8 @@ function setLoadingState(isLoading) {
   worksState.loading = isLoading;
 
   if (elements.refresh) elements.refresh.disabled = isLoading;
-  if (elements.status) elements.status.textContent = isLoading ? 'RSS laden' : 'Live updates';
-  if (elements.updated) elements.updated.textContent = isLoading ? 'Gemeentelijke feeds worden opgehaald.' : `Bijgewerkt om ${formatTime(new Date())}`;
+  if (elements.status) elements.status.textContent = isLoading ? 'RSS laden' : 'Updates';
+  if (elements.updated) elements.updated.textContent = isLoading ? 'Berichten ophalen.' : `Bijgewerkt ${formatTime(new Date())}`;
 }
 
 function filteredItems() {
@@ -291,62 +294,64 @@ function renderSources(successfulFeeds = []) {
   }).join('');
 }
 
-function renderTopWork(items) {
-  if (!elements.topWork) return;
+function renderPagination(totalPages) {
+  if (!elements.pagination) return;
 
-  const topWork = [...items].sort((a, b) => b.score - a.score || new Date(b.publishedAt) - new Date(a.publishedAt))[0];
-
-  if (!topWork) {
-    elements.topWork.innerHTML = `
-      <span class="small-label">Meest relevant</span>
-      <h2>Geen updates gevonden</h2>
-      <p>Er zijn op dit moment geen werkzaamheden of bekendmakingen die passen bij je filter of zoekterm.</p>
-    `;
+  if (totalPages <= 1) {
+    elements.pagination.innerHTML = '';
+    elements.pagination.hidden = true;
     return;
   }
 
-  elements.topWork.innerHTML = `
-    <span class="small-label">Meest relevant</span>
-    <h2>${escapeHtml(topWork.title)}</h2>
-    <p>${escapeHtml(topWork.description || 'Open de bron om meer te lezen.')}</p>
-    <div class="works-item-meta">
-      <span class="works-tag hot">${escapeHtml(topWork.feedLabel)}</span>
-      <span>${escapeHtml(topWork.source)}</span>
-      <span>${escapeHtml(formatDate(topWork.publishedAt))}</span>
-    </div>
-    <a href="${escapeHtml(topWork.link)}" target="_blank" rel="noopener noreferrer">Bekijk bij bron</a>
-  `;
+  elements.pagination.hidden = false;
+  elements.pagination.innerHTML = Array.from({ length: totalPages }, (_, index) => {
+    const page = index + 1;
+    const active = page === worksState.currentPage;
+    return `<button type="button" class="works-page-button${active ? ' active' : ''}" data-page="${page}" aria-current="${active ? 'page' : 'false'}">${page}</button>`;
+  }).join('');
+}
+
+function sortedVisibleItems() {
+  return filteredItems()
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt) || b.score - a.score)
+    .slice(0, MAX_WORK_ITEMS);
 }
 
 function renderList() {
-  const items = filteredItems()
-    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt) || b.score - a.score)
-    .slice(0, MAX_WORK_ITEMS);
+  const items = sortedVisibleItems();
+  const totalPages = Math.max(1, Math.ceil(items.length / WORK_PAGE_SIZE));
+
+  if (worksState.currentPage > totalPages) worksState.currentPage = totalPages;
+  if (worksState.currentPage < 1) worksState.currentPage = 1;
 
   if (elements.count) elements.count.textContent = String(worksState.allItems.length);
   if (elements.lastUpdate) elements.lastUpdate.textContent = formatTime(new Date());
 
-  renderTopWork(items);
-
   if (!elements.list) return;
 
   if (!items.length) {
-    elements.list.innerHTML = '<div class="empty-works">Geen werkzaamheden of bekendmakingen gevonden voor deze filter of zoekterm.</div>';
+    elements.list.innerHTML = '<div class="empty-works">Geen werkzaamheden of bekendmakingen gevonden.</div>';
+    renderPagination(0);
     return;
   }
 
-  elements.list.innerHTML = items.map((item) => {
+  const start = (worksState.currentPage - 1) * WORK_PAGE_SIZE;
+  const pageItems = items.slice(start, start + WORK_PAGE_SIZE);
+
+  elements.list.innerHTML = pageItems.map((item, index) => {
+    const absoluteIndex = start + index;
     const workClass = item.category === 'werkzaamheden' ? 'works-work' : 'works-publication';
-    const tagText = item.category === 'werkzaamheden' ? 'Werkzaamheden' : 'Bekendmaking';
+    const tagText = absoluteIndex === 0 ? 'Laatste bericht' : item.category === 'werkzaamheden' ? 'Werkzaamheden' : 'Bekendmaking';
+    const isFeatured = absoluteIndex === 0;
 
     return `
-      <article class="works-item ${workClass}">
+      <article class="works-item ${workClass}${isFeatured ? ' is-featured' : ''}">
         <div class="works-item-header">
           <div>
             <span class="works-item-source">${escapeHtml(item.feedLabel)}</span>
             <h3><a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a></h3>
           </div>
-          <span class="works-tag ${item.score >= 5 ? 'hot' : ''}">${escapeHtml(tagText)}</span>
+          <span class="works-tag ${isFeatured || item.score >= 5 ? 'hot' : ''}">${escapeHtml(tagText)}</span>
         </div>
         <p>${escapeHtml(item.description || 'Geen samenvatting beschikbaar via deze feed.')}</p>
         <div class="works-item-meta">
@@ -356,9 +361,12 @@ function renderList() {
       </article>
     `;
   }).join('');
+
+  renderPagination(totalPages);
 }
 
 async function loadWorks() {
+  worksState.currentPage = 1;
   setLoadingState(true);
 
   if (elements.list) {
@@ -368,6 +376,7 @@ async function loadWorks() {
       <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
     `;
   }
+  if (elements.pagination) elements.pagination.innerHTML = '';
 
   const settled = await Promise.allSettled(WORK_FEEDS.map(async (feed) => ({
     feed,
@@ -388,17 +397,17 @@ async function loadWorks() {
   renderSources(successful.map((result) => result.feed.id));
 
   if (!allItems.length) {
-    if (elements.status) elements.status.textContent = 'RSS niet bereikbaar';
-    if (elements.updated) elements.updated.textContent = 'Geen gemeentelijke feed kon worden geladen.';
+    if (elements.status) elements.status.textContent = 'Niet bereikbaar';
+    if (elements.updated) elements.updated.textContent = 'Geen berichten geladen.';
     if (elements.list) {
-      elements.list.innerHTML = '<div class="error-works">Gemeentelijke RSS-feeds konden niet worden geladen. Dit komt meestal doordat Google News of de publieke RSS-proxy tijdelijk blokkeert. Voor productie is een eigen serverless endpoint betrouwbaarder.</div>';
+      elements.list.innerHTML = '<div class="error-works">Werkzaamheden en bekendmakingen kunnen nu niet worden geladen. Probeer het later opnieuw.</div>';
     }
-    renderTopWork([]);
+    renderPagination(0);
     return;
   }
 
   if (failed.length && elements.updated) {
-    elements.updated.textContent = `${successful.length} van ${WORK_FEEDS.length} feeds geladen om ${formatTime(new Date())}`;
+    elements.updated.textContent = `${successful.length} van ${WORK_FEEDS.length} bronnen geladen om ${formatTime(new Date())}`;
   }
 
   renderList();
@@ -408,6 +417,7 @@ function setupEvents() {
   elements.filters.forEach((button) => {
     button.addEventListener('click', () => {
       worksState.activeFilter = button.dataset.filter || 'all';
+      worksState.currentPage = 1;
       elements.filters.forEach((item) => item.classList.toggle('active', item === button));
       renderList();
     });
@@ -415,7 +425,16 @@ function setupEvents() {
 
   elements.search?.addEventListener('input', (event) => {
     worksState.search = event.target.value;
+    worksState.currentPage = 1;
     renderList();
+  });
+
+  elements.pagination?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-page]');
+    if (!button) return;
+    worksState.currentPage = Number(button.dataset.page) || 1;
+    renderList();
+    elements.list?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   elements.refresh?.addEventListener('click', () => {
