@@ -50,13 +50,16 @@ WEATHER_API_URL.search = new URLSearchParams({
 }).toString();
 
 const elements = {
-  intro: document.querySelector('#weatherIntro'),
   currentWeatherIcon: document.querySelector('#currentWeatherIcon'),
   rainHeadline: document.querySelector('#rainHeadline'),
   currentTemp: document.querySelector('#currentTemp'),
   currentDetails: document.querySelector('#currentDetails'),
   feelsLikeText: document.querySelector('#feelsLikeText'),
   feelsLikeMetric: document.querySelector('#feelsLikeMetric'),
+  heroRain: document.querySelector('#heroRain'),
+  heroWind: document.querySelector('#heroWind'),
+  heroFeels: document.querySelector('#heroFeels'),
+  heroVisibility: document.querySelector('#heroVisibility'),
   todaySummary: document.querySelector('#todaySummary'),
   todayText: document.querySelector('#todayText'),
   rainChance: document.querySelector('#rainChance'),
@@ -384,9 +387,13 @@ function renderCurrent(data) {
   elements.weatherUpdated.textContent = `Bijgewerkt ${formatTime(current.time)}`;
   elements.forecastButton.textContent = 'Live';
   elements.radarStatus.textContent = 'Kaart';
-  elements.intro.textContent = `Snel overzicht voor ${WEATHER_LOCATION.name}: regen, wind en gevoelstemperatuur.`;
   elements.adviceTitle.textContent = advice.title;
   elements.adviceText.textContent = advice.text;
+
+  if (elements.heroRain) elements.heroRain.textContent = `${round(rainInfo.maxTwoHourChance)}%`;
+  if (elements.heroWind) elements.heroWind.textContent = `${bft} Bft`;
+  if (elements.heroFeels) elements.heroFeels.textContent = `${round(current.apparent_temperature)}°`;
+  if (elements.heroVisibility) elements.heroVisibility.textContent = `${visibility} km`;
 
   updateAttention(data, rainInfo, bft);
 }
