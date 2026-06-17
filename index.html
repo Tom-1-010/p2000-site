@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="112indewijk is een overzichtelijk buurtplatform voor P2000-meldingen, veiligheidsupdates en praktische informatie in de wijk."
-    />
+    <meta name="description" content="112indewijk toont P2000-meldingen, veiligheidsupdates en praktische informatie in de wijk." />
     <title>112indewijk - Meldingen in jouw buurt</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -21,9 +18,7 @@
           </span>
         </a>
 
-        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainMenu">
-          Menu
-        </button>
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainMenu">Menu</button>
 
         <div class="nav-links" id="mainMenu">
           <a href="#meldingen">Meldingen</a>
@@ -40,9 +35,7 @@
           <div class="hero-copy">
             <p class="label">Buurtplatform voor meldingen en veiligheid</p>
             <h1>Bekijk wat er speelt in jouw wijk.</h1>
-            <p class="hero-text">
-              112indewijk bundelt recente P2000-meldingen, buurtinformatie en praktische veiligheidstips in één rustige en duidelijke omgeving.
-            </p>
+            <p class="hero-text">112indewijk bundelt recente P2000-meldingen, buurtinformatie en praktische veiligheidstips in één rustige en duidelijke omgeving.</p>
             <div class="hero-actions">
               <a class="button primary" href="#meldingen">Bekijk meldingen</a>
               <a class="button secondary" href="#veiligheid">Veiligheidstips</a>
@@ -52,10 +45,10 @@
           <aside class="hero-card" aria-label="Actuele status">
             <div class="status-line">
               <span class="live-dot"></span>
-              <span>Voorbeeldweergave actief</span>
+              <span id="feedStatus">P2000-feed laden...</span>
             </div>
             <h2>Maasregio</h2>
-            <p>Maassluis, Vlaardingen, Schiedam, Rozenburg, Maasland en omgeving.</p>
+            <p>Filter live meldingen op stad, plaats, wijk en discipline.</p>
             <dl class="quick-stats">
               <div>
                 <dt>Vandaag</dt>
@@ -77,8 +70,8 @@
         </div>
         <div class="filter-grid">
           <label>
-            Plaats of wijk
-            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis, Centrum of Haven" />
+            Stad, plaats of wijk
+            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis, Schiedam of Rotterdam" />
           </label>
           <label>
             Discipline
@@ -87,6 +80,7 @@
               <option value="brandweer">Brandweer</option>
               <option value="ambulance">Ambulance</option>
               <option value="politie">Politie</option>
+              <option value="overig">Overig</option>
             </select>
           </label>
           <label>
@@ -127,7 +121,7 @@
               <p class="label">Live overzicht</p>
               <h2 id="meldingen-title">Recente meldingen</h2>
             </div>
-            <span class="subtle-badge">Demo data</span>
+            <span class="subtle-badge" id="apiStatus">Feed laden</span>
           </div>
           <div id="messagesList" class="messages-list"></div>
         </section>
@@ -139,9 +133,7 @@
               <h2 id="details-title">Details</h2>
             </div>
           </div>
-          <div id="messageDetails" class="message-details empty-state">
-            Selecteer een melding om details te bekijken.
-          </div>
+          <div id="messageDetails" class="message-details empty-state">Selecteer een melding om details te bekijken.</div>
         </aside>
       </section>
 
@@ -149,7 +141,7 @@
         <div class="section-heading-center">
           <p class="label">Buurtbeeld</p>
           <h2>Wat speelt er in de omgeving?</h2>
-          <p>Een compact overzicht voor bewoners die snel willen zien welke soort meldingen in de buurt voorkomen.</p>
+          <p>Een compact overzicht van meldingen per plaats op basis van de geladen P2000-data.</p>
         </div>
         <div id="neighbourhoodGrid" class="neighbourhood-grid"></div>
       </section>
@@ -165,7 +157,7 @@
             <article class="safety-card">
               <span class="card-kicker">Spoed</span>
               <h3>Bel 112 bij direct gevaar</h3>
-              <p>Bij brand, levensgevaar, heterdaad of een medische noodsituatie bel je altijd direct 112.</p>
+              <p>Bij brand, levensgevaar, heterdaad of een medische noodsituatie bel je direct 112.</p>
             </article>
             <article class="safety-card">
               <span class="card-kicker">Geen spoed</span>
@@ -195,8 +187,8 @@
           <p>Een rustig buurtplatform voor meldingen, duiding en praktische veiligheidsinformatie.</p>
         </div>
         <div>
-          <h2>Let op</h2>
-          <p>Deze versie gebruikt voorbeelddata. Er is nog geen live P2000-feed gekoppeld.</p>
+          <h2>P2000-feed</h2>
+          <p>De site probeert live P2000-data te laden. Als de browser of feed dit blokkeert, valt de site terug op voorbeelddata.</p>
         </div>
       </div>
     </footer>
