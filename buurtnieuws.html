@@ -103,7 +103,7 @@
           <div>
             <span class="small-label">Bronnen</span>
             <h2>RSS-feeds</h2>
-            <p>De pagina gebruikt zes RSS-zoekfeeds: WOS, Rijnmond, Gemeente Maassluis, Politie, Werkzaamheden en Bekendmakingen. Bij blokkade door CORS probeert de pagina automatisch een proxy-fallback.</p>
+            <p>De pagina gebruikt zes RSS-zoekfeeds: WOS, Rijnmond, Gemeente Maassluis, Politie, Werkzaamheden en Bekendmakingen. Eerst via RSS2JSON, daarna via XML-proxy fallback.</p>
           </div>
           <ul id="sourceList" class="source-list"></ul>
         </section>
@@ -120,6 +120,6 @@
     </nav>
 
     <script src="app.js?v=20260617-basis"></script>
-    <script src="news.js?v=20260617-rss-2"></script>
+    <script src="news.js?v=20260617-rss-3"></script>
   </body>
 </html>
