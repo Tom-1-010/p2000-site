@@ -7,6 +7,106 @@
     <title>Buurtweer - De Buurtwacht</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQKYnKxIRqfZ5U7reFhVxjRY3QoVtq8=" crossorigin="" />
     <link rel="stylesheet" href="styles.css?v=20260617-buurtweer-3" />
+    <style>
+      .rain-timer-card {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        min-width: 0;
+        margin: 0 0 10px;
+        padding: 11px 12px;
+        background: #fff;
+        border: 1px solid var(--line-dark);
+        border-left: 4px solid var(--blue);
+        border-radius: 10px;
+        box-shadow: 0 5px 16px rgba(24, 36, 56, 0.045);
+      }
+      .rain-timer-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        color: var(--blue-dark);
+        background: #eef8ff;
+        border: 1px solid rgba(52,172,252,.28);
+        border-radius: 9px;
+      }
+      .rain-timer-copy { min-width: 0; }
+      .rain-timer-label {
+        display: block;
+        margin-bottom: 1px;
+        color: var(--blue-dark);
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+      .rain-timer-title {
+        display: block;
+        overflow-wrap: anywhere;
+        color: var(--navy);
+        font-size: clamp(18px, 2.4vw, 24px);
+        line-height: 1.1;
+        letter-spacing: -.035em;
+      }
+      .rain-timer-text {
+        margin-top: 2px;
+        overflow-wrap: anywhere;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .rain-timer-side {
+        display: grid;
+        gap: 6px;
+        min-width: 178px;
+      }
+      .rain-timer-meta {
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 850;
+        text-align: right;
+      }
+      .rain-timer-scale {
+        display: grid;
+        gap: 4px;
+      }
+      .rain-timer-track {
+        position: relative;
+        height: 7px;
+        overflow: hidden;
+        background: #e7eef5;
+        border-radius: 999px;
+      }
+      .rain-timer-progress {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: var(--blue);
+        border-radius: inherit;
+        transition: width .25s ease;
+      }
+      .rain-timer-scale-labels {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 850;
+      }
+      .rain-timer-card.is-raining { border-left-color: #176fa8; }
+      .rain-timer-card.is-raining .rain-timer-progress { background: #176fa8; }
+      .rain-timer-card.is-dry { border-left-color: #75b985; }
+      .rain-timer-card.is-dry .rain-timer-progress { background: #75b985; }
+      .rain-timer-card.is-error { border-left-color: #b36b22; }
+      .rain-timer-card.is-error .rain-timer-progress { background: #b36b22; }
+      @media (max-width: 720px) {
+        .rain-timer-card { grid-template-columns: auto minmax(0, 1fr); align-items: start; padding: 10px; }
+        .rain-timer-side { grid-column: 1 / -1; min-width: 0; }
+        .rain-timer-meta { text-align: left; }
+      }
+    </style>
   </head>
   <body data-page="buurtweer">
     <header class="app-header">
@@ -50,6 +150,24 @@
             <span><b id="heroWind">-- Bft</b><small>wind</small></span>
             <span><b id="heroFeels">--°</b><small>gevoel</small></span>
             <span><b id="heroVisibility">-- km</b><small>zicht</small></span>
+          </div>
+        </section>
+
+        <section id="rainTimerCard" class="rain-timer-card is-loading" aria-live="polite" aria-label="Timer voor verwachte regen">
+          <span class="rain-timer-icon" aria-hidden="true">
+            <svg class="weather-svg weather-svg-rain weather-svg-small" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15.5h10a4 4 0 0 0 .4-8A6 6 0 0 0 6.1 9 3.5 3.5 0 0 0 7 15.5Z"></path><path d="M8 19l-.8 2M12 19l-.8 2M16 19l-.8 2"></path></svg>
+          </span>
+          <div class="rain-timer-copy">
+            <span class="rain-timer-label">Regenverwachting</span>
+            <strong id="rainTimerTitle" class="rain-timer-title">Regenverwachting laden…</strong>
+            <p id="rainTimerText" class="rain-timer-text">We controleren de komende 12 uur voor Maassluis.</p>
+          </div>
+          <div class="rain-timer-side" aria-label="Samenvatting regenmoment">
+            <span id="rainTimerMeta" class="rain-timer-meta">Live data laden</span>
+            <div class="rain-timer-scale" aria-hidden="true">
+              <span class="rain-timer-track"><span id="rainTimerProgress" class="rain-timer-progress"></span></span>
+              <span class="rain-timer-scale-labels"><span>Nu</span><span id="rainTimerEnd">regenmoment</span></span>
+            </div>
           </div>
         </section>
 
@@ -188,6 +306,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="app.js?v=20260617-buurtweer-3"></script>
-    <script src="weather.js?v=20260617-buurtweer-3"></script>
+    <script src="weather.js?v=20260617-buurtweer-4"></script>
   </body>
 </html>
