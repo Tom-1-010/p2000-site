@@ -1,30 +1,584 @@
-body[data-page="buurtweer"]{padding-bottom:132px}
-body[data-page="buurtweer"] .weather-shell{width:min(100%,calc(100vw - 24px));display:grid;gap:8px;padding:8px 0 144px;overflow-x:hidden}
-body[data-page="buurtweer"] main,body[data-page="buurtweer"] section,body[data-page="buurtweer"] article,body[data-page="buurtweer"] div{box-sizing:border-box;max-width:100%;min-width:0}
-body[data-page="buurtweer"] .weather-toolbar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:0}
-body[data-page="buurtweer"] .weather-toolbar h1{margin:0;font-size:clamp(27px,7.8vw,36px);line-height:1.02;letter-spacing:-.055em}
-body[data-page="buurtweer"] .weather-toolbar .eyebrow{margin:0 0 2px;font-size:10px}
-body[data-page="buurtweer"] .update-label{flex:0 0 auto;max-width:136px;min-height:27px;padding:0 8px;overflow:hidden;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
-.weather-view-switch{display:block;margin:0;padding:0;background:transparent;border:0;box-shadow:none}.weather-switch-copy{display:none}
-.weather-switch-buttons{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;max-width:292px;padding:3px;background:#fff;border:1px solid var(--line-dark);border-radius:10px;box-shadow:0 2px 8px rgba(24,36,56,.045)}
-.weather-switch-button{min-height:30px;padding:0 8px;overflow:hidden;color:var(--muted);background:transparent;border:0;border-radius:8px;font-size:12px;font-weight:900;text-overflow:ellipsis;white-space:nowrap}.weather-switch-button.is-active{color:#fff;background:var(--navy)}
-.weather-view-panel[hidden],.weather-rain-graph[hidden]{display:none!important}.weather-today-panel,.weather-days-panel{display:grid;gap:8px}
-body[data-page="buurtweer"] .weather-main-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 10px;margin:0;padding:10px;border-left-width:3px;border-radius:11px}
-body[data-page="buurtweer"] .weather-hero-main{display:flex;align-items:flex-start;gap:8px;min-width:0}
-body[data-page="buurtweer"] .weather-icon-large{flex:0 0 38px;width:38px;height:38px;border-radius:9px}body[data-page="buurtweer"] .weather-icon-large .weather-svg{width:24px;height:24px}
-body[data-page="buurtweer"] .weather-hero-copy{min-width:0}body[data-page="buurtweer"] .weather-hero-main strong{display:block;margin:0 0 2px;overflow-wrap:anywhere;font-size:clamp(23px,6vw,31px);line-height:1.03}
-body[data-page="buurtweer"] .weather-hero-main p{max-width:100%;overflow-wrap:anywhere;font-size:12px;line-height:1.25}
-body[data-page="buurtweer"] .weather-temp-block{display:grid;justify-items:end;gap:1px;padding-left:8px}body[data-page="buurtweer"] .weather-temp-block strong{font-size:clamp(38px,9vw,52px);line-height:.92}body[data-page="buurtweer"] .weather-temp-block span{font-size:11px;white-space:nowrap}
-body[data-page="buurtweer"] .hero-facts{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}body[data-page="buurtweer"] .hero-facts span{min-height:44px;padding:6px 7px;border-radius:8px}body[data-page="buurtweer"] .hero-facts b{font-size:16px;line-height:1.05}body[data-page="buurtweer"] .hero-facts small{font-size:10px}
-body[data-page="buurtweer"] .rain-timer-card{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(92px,.28fr);gap:8px;align-items:center;margin:0;padding:9px;border-left-width:3px;border-radius:11px}body[data-page="buurtweer"] .rain-timer-icon{width:30px;height:30px}body[data-page="buurtweer"] .rain-timer-title{font-size:clamp(17px,4.3vw,22px);line-height:1.1}body[data-page="buurtweer"] .rain-timer-text,body[data-page="buurtweer"] .rain-timer-meta{font-size:11px;line-height:1.25}
-body[data-page="buurtweer"] .weather-hour-card,body[data-page="buurtweer"] .weather-rain-graph,body[data-page="buurtweer"] .weather-days-panel,body[data-page="buurtweer"] .compact-map-card{margin:0;padding:9px;border-radius:11px}
-body[data-page="buurtweer"] .card-header-row.compact,body[data-page="buurtweer"] .section-title-row{margin-bottom:6px}body[data-page="buurtweer"] .card-header-row h2,body[data-page="buurtweer"] .section-title-row h2{font-size:18px}body[data-page="buurtweer"] .card-header-row small{font-size:11px}
-body[data-page="buurtweer"] .forecast-timeline{gap:6px;padding-bottom:2px}body[data-page="buurtweer"] .timeline-item{flex:0 0 62px;min-height:76px;padding:5px;border-radius:8px}body[data-page="buurtweer"] .timeline-item span{font-size:10px}body[data-page="buurtweer"] .timeline-item strong{font-size:18px}body[data-page="buurtweer"] .timeline-item small{font-size:10px}body[data-page="buurtweer"] .timeline-item .weather-svg-small{width:18px;height:18px}
-.weather-detail-compact{display:grid;gap:7px;margin:0}body[data-page="buurtweer"] .current-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}body[data-page="buurtweer"] .metric-card{min-height:50px;padding:7px;gap:6px;border-radius:9px}body[data-page="buurtweer"] .metric-icon{width:25px;height:25px}body[data-page="buurtweer"] .metric-icon::before{width:15px;height:15px}body[data-page="buurtweer"] .metric-card strong{font-size:16px}body[data-page="buurtweer"] .metric-card small{font-size:10px}
-.weather-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.weather-mini-panel{min-height:0;margin:0;padding:8px;border-radius:9px}.weather-mini-panel strong,body[data-page="buurtweer"] .practical-title-row strong{font-size:14px}.weather-mini-panel p,body[data-page="buurtweer"] .practical-panel p{font-size:11px;line-height:1.25}
-.weather-map-row{display:block;margin:0}body[data-page="buurtweer"] .compact-map-card .weather-map{height:145px}body[data-page="buurtweer"] .map-note{margin-top:5px;font-size:10px}.weather-day-note{display:none}
-#weatherDaysPanel .daily-list article:first-child{display:none}#weatherDaysPanel .daily-list{display:grid;gap:6px;border:0;border-radius:0;overflow:visible}#weatherDaysPanel .daily-list article{display:grid;grid-template-columns:minmax(78px,1fr) 28px auto minmax(78px,1fr);gap:7px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:9px}
-body[data-page="buurtweer"] .bottom-nav{max-width:min(520px,calc(100vw - 24px));padding:4px}body[data-page="buurtweer"] .bottom-nav a{min-height:42px;font-size:9px}body[data-page="buurtweer"] .bottom-nav .nav-icon{width:19px;height:19px}
-@media(max-width:760px){body[data-page="buurtweer"] .weather-main-card{grid-template-columns:1fr}body[data-page="buurtweer"] .weather-temp-block{justify-items:start;padding:6px 0 0;border-top:1px solid var(--line);border-left:0}body[data-page="buurtweer"] .weather-temp-block strong{font-size:clamp(42px,12vw,50px)}body[data-page="buurtweer"] .hero-facts,body[data-page="buurtweer"] .current-strip{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-page="buurtweer"] .rain-timer-card{grid-template-columns:auto minmax(0,1fr)}body[data-page="buurtweer"] .rain-timer-side{grid-column:1/-1}.weather-info-grid{grid-template-columns:1fr}#weatherDaysPanel .daily-list article{grid-template-columns:minmax(76px,1fr) 26px auto}#weatherDaysPanel .daily-list article p{grid-column:1/-1}}
-@media(max-width:430px){body[data-page="buurtweer"] .weather-shell{width:min(100%,calc(100vw - 20px));gap:7px}body[data-page="buurtweer"] .weather-toolbar h1{font-size:clamp(26px,8vw,32px)}body[data-page="buurtweer"] .update-label{max-width:126px}body[data-page="buurtweer"] .weather-hero-main strong{font-size:26px}body[data-page="buurtweer"] .weather-temp-block strong{font-size:46px}body[data-page="buurtweer"] .timeline-item{flex-basis:58px;min-height:74px}}
-@media(max-width:360px){body[data-page="buurtweer"] .weather-toolbar{display:grid}body[data-page="buurtweer"] .update-label{max-width:none}body[data-page="buurtweer"] .hero-facts,body[data-page="buurtweer"] .current-strip{grid-template-columns:1fr}}
+:root {
+  --weather-blue: #63b9f6;
+  --weather-blue-dark: #0b3d78;
+  --weather-blue-mid: #1b73c9;
+  --weather-card: rgba(255, 255, 255, .94);
+  --weather-line: rgba(9, 38, 77, .13);
+  --weather-shadow: 0 14px 34px rgba(10, 51, 98, .14);
+}
+
+body[data-page="buurtweer"] {
+  min-height: 100vh;
+  padding-bottom: 132px;
+  color: #0a315f;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 222, 67, .7) 0 70px, transparent 72px),
+    radial-gradient(circle at 88% 12%, rgba(255,255,255,.42) 0 54px, transparent 55px),
+    linear-gradient(180deg, #6ec6ff 0%, #8dc5f2 34%, #f4f8fb 74%);
+}
+
+body[data-page="buurtweer"] .app-header {
+  background: rgba(255,255,255,.76);
+  border-bottom: 1px solid rgba(255,255,255,.55);
+  backdrop-filter: blur(16px);
+}
+
+body[data-page="buurtweer"] .appbar {
+  min-height: 56px;
+}
+
+body[data-page="buurtweer"] main {
+  overflow-x: hidden;
+}
+
+body[data-page="buurtweer"] .weather-shell {
+  width: min(1080px, calc(100vw - 24px));
+  display: grid;
+  gap: 12px;
+  padding: 12px 0 140px;
+  overflow-x: hidden;
+}
+
+body[data-page="buurtweer"] .weather-shell * {
+  box-sizing: border-box;
+}
+
+.weather-native-hero {
+  position: relative;
+  min-height: 330px;
+  overflow: hidden;
+  padding: 18px;
+  color: #08315f;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.04)),
+    #7bc7ff;
+  border: 1px solid rgba(255,255,255,.46);
+  border-radius: 28px;
+  box-shadow: 0 20px 46px rgba(9, 63, 125, .18);
+}
+
+.weather-native-hero::after {
+  content: "";
+  position: absolute;
+  right: -70px;
+  bottom: -95px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,.17);
+  border-radius: 50%;
+}
+
+.sky-shape {
+  position: absolute;
+  pointer-events: none;
+}
+
+.sky-shape.sun {
+  left: 44px;
+  top: 72px;
+  width: 124px;
+  height: 124px;
+  background: radial-gradient(circle, #ffe66b 0%, #ffd21e 62%, rgba(255,210,30,.25) 100%);
+  border-radius: 50%;
+  filter: blur(.1px);
+}
+
+.sky-shape.cloud {
+  background: rgba(255,255,255,.42);
+  border-radius: 999px;
+  filter: blur(.2px);
+}
+
+.sky-shape.cloud::before,
+.sky-shape.cloud::after {
+  content: "";
+  position: absolute;
+  background: rgba(255,255,255,.46);
+  border-radius: 50%;
+}
+
+.cloud-left {
+  left: -36px;
+  top: 154px;
+  width: 190px;
+  height: 74px;
+}
+
+.cloud-left::before { left: 26px; top: -44px; width: 92px; height: 92px; }
+.cloud-left::after { left: 106px; top: -18px; width: 82px; height: 82px; }
+
+.cloud-right {
+  right: -20px;
+  top: 104px;
+  width: 172px;
+  height: 72px;
+}
+
+.cloud-right::before { left: 34px; top: -52px; width: 96px; height: 96px; }
+.cloud-right::after { left: 112px; top: -14px; width: 70px; height: 70px; }
+
+.weather-topline {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.weather-topline .eyebrow {
+  margin: 0 0 3px;
+  color: rgba(7, 48, 96, .72);
+  font-size: 11px;
+}
+
+.weather-topline h1 {
+  margin: 0;
+  color: #073060;
+  font-size: clamp(32px, 7vw, 56px);
+  line-height: 1;
+  letter-spacing: -.06em;
+}
+
+body[data-page="buurtweer"] .update-label {
+  min-height: 32px;
+  padding: 0 12px;
+  color: #073060;
+  background: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.weather-current-stage {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin-top: 26px;
+  text-align: center;
+}
+
+.weather-current-stage .weather-icon-large {
+  width: 66px;
+  height: 66px;
+  color: #073060;
+  background: rgba(255,255,255,.38);
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 22px;
+}
+
+.weather-current-stage .weather-svg {
+  width: 42px;
+  height: 42px;
+}
+
+.weather-big-temp {
+  display: block;
+  color: #062a55;
+  font-size: clamp(88px, 20vw, 140px);
+  font-weight: 850;
+  line-height: .86;
+  letter-spacing: -.09em;
+}
+
+.weather-current-copy strong {
+  display: block;
+  color: #062a55;
+  font-size: clamp(28px, 6vw, 44px);
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+
+.weather-current-copy p,
+.weather-current-copy span {
+  display: block;
+  color: rgba(7, 48, 96, .76);
+  font-size: 15px;
+  font-weight: 720;
+}
+
+.weather-fact-strip {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.weather-fact-strip span {
+  min-width: 0;
+  padding: 10px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.66);
+  border-radius: 16px;
+}
+
+.weather-fact-strip b {
+  display: block;
+  overflow: hidden;
+  color: #062a55;
+  font-size: 22px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.weather-fact-strip small {
+  color: rgba(7, 48, 96, .7);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.weather-view-switch {
+  display: block;
+}
+
+.weather-switch-copy { display: none; }
+
+.weather-switch-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  background: rgba(255,255,255,.76);
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 18px;
+  box-shadow: var(--weather-shadow);
+  backdrop-filter: blur(14px);
+}
+
+.weather-switch-button {
+  min-height: 42px;
+  color: #33557b;
+  background: transparent;
+  border: 0;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.weather-switch-button.is-active {
+  color: #fff;
+  background: #0a3470;
+  box-shadow: 0 8px 20px rgba(7, 42, 86, .22);
+}
+
+.weather-view-panel[hidden],
+.weather-rain-graph[hidden] { display: none !important; }
+
+.weather-today-panel,
+.weather-days-panel {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.weather-radar-card,
+.weather-hour-card,
+.weather-rain-graph,
+.weather-days-panel,
+.compact-map-card,
+.metric-card,
+.weather-mini-panel {
+  background: var(--weather-card);
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 24px;
+  box-shadow: var(--weather-shadow);
+  backdrop-filter: blur(12px);
+}
+
+.weather-radar-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, .35fr);
+  gap: 14px;
+  align-items: center;
+  margin: 0;
+  padding: 16px;
+  border-left: 0;
+}
+
+.weather-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.rain-timer-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  color: #0b63b4;
+  background: #e8f5ff;
+  border: 1px solid #b9e2ff;
+  border-radius: 16px;
+}
+
+.rain-timer-label,
+.small-label,
+.card-header-row span,
+.section-title-row span {
+  color: #496887;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.rain-timer-title {
+  color: #082c5a;
+  font-size: clamp(24px, 5vw, 36px);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+}
+
+.rain-timer-text,
+.rain-timer-meta,
+.rain-timer-scale-labels {
+  color: #59718d;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.rain-timer-track {
+  height: 9px;
+  background: #e3edf5;
+  border-radius: 999px;
+}
+
+.rain-timer-progress { background: #0b63b4; }
+
+.compact-card,
+.map-card,
+.plain-panel,
+.metric-card,
+.practical-panel {
+  padding: 16px;
+}
+
+.card-header-row.compact,
+.card-header-row {
+  margin-bottom: 12px;
+}
+
+.card-header-row h2,
+.section-title-row h2 {
+  color: #082c5a;
+  font-size: 24px;
+}
+
+.forecast-timeline {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.timeline-item {
+  flex: 0 0 92px;
+  min-height: 132px;
+  padding: 12px 10px;
+  background: #f5f9fc;
+  border: 1px solid #d7e3ec;
+  border-radius: 20px;
+}
+
+.timeline-item.active {
+  background: #e6f5ff;
+  border-color: #83cbff;
+}
+
+.timeline-item span { color: #5a718d; font-size: 13px; font-weight: 850; }
+.timeline-item strong { color: #082c5a; font-size: 28px; }
+.timeline-item small { color: #0a78d8; font-size: 14px; font-weight: 950; }
+.timeline-item i { width: 5px; background: #2caeff; opacity: .75; }
+
+.weather-map-row {
+  display: block;
+  margin: 0;
+}
+
+.compact-map-card .weather-map {
+  height: 260px;
+  border: 0;
+  border-radius: 20px;
+}
+
+.map-note { color: #5b718a; }
+
+.weather-detail-compact {
+  display: grid;
+  gap: 12px;
+}
+
+.current-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 82px;
+}
+
+.metric-icon {
+  width: 38px;
+  height: 38px;
+  color: #0b63b4;
+  background: #e8f5ff;
+  border-radius: 14px;
+}
+
+.metric-card strong { color: #082c5a; font-size: 24px; }
+.metric-card small { color: #5b718a; }
+
+.weather-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.weather-mini-panel { min-height: 118px; }
+.weather-mini-panel strong { color: #082c5a; font-size: 18px; }
+.weather-mini-panel p { color: #5b718a; font-size: 14px; }
+
+.weather-days-panel {
+  padding: 16px;
+}
+
+#weatherDaysPanel .daily-list {
+  display: grid;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+#weatherDaysPanel .daily-list article:first-child { display: none; }
+
+#weatherDaysPanel .daily-list article {
+  display: grid;
+  grid-template-columns: minmax(92px, 1fr) 42px minmax(92px, auto) minmax(104px, 1.2fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 72px;
+  padding: 13px 2px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #dce7ef;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#weatherDaysPanel .daily-list article:last-child { border-bottom: 0; }
+#weatherDaysPanel .daily-list span:first-child { color: #082c5a; font-size: 19px; font-weight: 850; }
+#weatherDaysPanel .daily-list strong { color: #082c5a; font-size: 19px; }
+#weatherDaysPanel .daily-list p { color: #55708d; font-size: 14px; }
+
+body[data-page="buurtweer"] .bottom-nav {
+  max-width: min(540px, calc(100vw - 24px));
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(255,255,255,.8);
+  box-shadow: 0 18px 46px rgba(10, 40, 78, .2);
+}
+
+@media (max-width: 760px) {
+  body[data-page="buurtweer"] .weather-shell {
+    width: min(100%, calc(100vw - 22px));
+    gap: 10px;
+    padding-bottom: 150px;
+  }
+
+  .weather-native-hero {
+    min-height: 292px;
+    padding: 15px;
+    border-radius: 24px;
+  }
+
+  .weather-topline h1 { font-size: 36px; }
+  .weather-big-temp { font-size: 102px; }
+  .weather-current-copy strong { font-size: 31px; }
+
+  .weather-current-stage {
+    margin-top: 18px;
+  }
+
+  .weather-fact-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 14px;
+  }
+
+  .weather-radar-card {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .rain-timer-side { min-width: 0; }
+
+  .timeline-item {
+    flex-basis: 82px;
+    min-height: 120px;
+  }
+
+  .current-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .weather-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-mini-panel { min-height: auto; }
+
+  .compact-map-card .weather-map {
+    height: 210px;
+  }
+
+  #weatherDaysPanel .daily-list article {
+    grid-template-columns: minmax(92px, 1fr) 34px minmax(82px, auto);
+    gap: 8px;
+  }
+
+  #weatherDaysPanel .daily-list article p {
+    grid-column: 1 / -1;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  body[data-page="buurtweer"] .weather-shell { width: min(100%, calc(100vw - 18px)); }
+  .weather-native-hero { min-height: 284px; padding: 14px; }
+  .weather-topline h1 { font-size: 32px; }
+  .weather-big-temp { font-size: 92px; }
+  .weather-current-copy strong { font-size: 28px; }
+  .weather-current-copy p,
+  .weather-current-copy span { font-size: 13px; }
+  .weather-fact-strip span { padding: 9px; }
+  .weather-fact-strip b { font-size: 20px; }
+  .weather-switch-button { min-height: 38px; font-size: 14px; }
+  .timeline-item { flex-basis: 76px; min-height: 112px; }
+  .timeline-item strong { font-size: 24px; }
+  .compact-card,
+  .map-card,
+  .plain-panel,
+  .metric-card,
+  .practical-panel { padding: 13px; }
+}
+
+@media (max-width: 360px) {
+  .weather-topline { display: grid; }
+  .weather-fact-strip,
+  .current-strip { grid-template-columns: 1fr; }
+}
