@@ -3,20 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Buurtweer van De Buurtwacht toont regenradar, neerslagverwachting, uurverwachting en weeradvies voor jouw buurt." />
     <title>Buurtweer - De Buurtwacht</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="buurtweer">
-    <header class="site-header"><nav class="navbar" aria-label="Hoofdnavigatie"><a class="brand" href="index.html"><span class="brand-mark">DB</span><span><strong>De Buurtwacht</strong><small>alles voor jouw buurt</small></span></a><a class="header-action" href="index.html">Terug naar home</a></nav></header>
+    <header class="app-header">
+      <nav class="appbar" aria-label="Hoofdnavigatie">
+        <a class="wordmark" href="index.html" aria-label="De Buurtwacht startpagina">
+          <span class="wordmark-de">De</span>
+          <span class="wordmark-name">Buurtwacht</span>
+        </a>
+        <a class="location-pill" href="mijnbuurt.html" aria-label="Mijn buurt instellen">
+          <span class="location-dot"></span>
+          Maassluis
+        </a>
+      </nav>
+    </header>
+
     <main>
-      <section class="page-hero page-width"><div class="page-panel"><span class="feature-icon icon-weather" aria-hidden="true"></span><p class="label">Buurtweer</p><h1>Weer dat praktisch is voor jouw wijk.</h1><p>Een eigen pagina voor temperatuur, regen, wind en waarschuwingen die bewoners direct kunnen gebruiken.</p></div></section>
-      <section class="content-grid page-width">
-        <article class="info-card"><span>Vandaag</span><strong>Actuele omstandigheden</strong><p>Temperatuur, wind en neerslag voor jouw buurt.</p></article>
-        <article class="info-card"><span>Regen</span><strong>Buien in de buurt</strong><p>Handig voor fietsen, school, werk en boodschappen.</p></article>
-        <article class="info-card"><span>Alert</span><strong>Weerwaarschuwingen</strong><p>Ruimte voor storm, gladheid, hitte of hevige regen.</p></article>
+      <section class="weather-shell page-width">
+        <div class="weather-title-row">
+          <div>
+            <p class="eyebrow dark">Buurtweer</p>
+            <h1>Regen en weer voor jouw buurt.</h1>
+            <p>Bekijk snel of je droog op pad kunt, wanneer buien komen en wat het weer de komende uren doet.</p>
+          </div>
+          <div class="weather-now-pill">
+            <span class="big-icon icon-weather" aria-hidden="true"></span>
+            <div>
+              <strong>17°</strong>
+              <p>Maassluis · nu</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="weather-dashboard" aria-label="Weeroverzicht">
+          <article class="radar-card">
+            <div class="radar-header">
+              <div>
+                <span>Live radar</span>
+                <h2>Buien in de regio</h2>
+              </div>
+              <button type="button">+60 min</button>
+            </div>
+            <div class="radar-map" aria-label="Voorbeeld regenradar rond Maassluis">
+              <div class="map-grid"></div>
+              <div class="map-water water-one"></div>
+              <div class="map-water water-two"></div>
+              <div class="rain-cell rain-a"></div>
+              <div class="rain-cell rain-b"></div>
+              <div class="rain-cell rain-c"></div>
+              <div class="city-marker main"><span></span>Maassluis</div>
+              <div class="city-marker marker-rotterdam"><span></span>Rotterdam</div>
+              <div class="city-marker marker-schiedam"><span></span>Schiedam</div>
+            </div>
+            <div class="radar-legend">
+              <span><i class="legend-light"></i>Lichte regen</span>
+              <span><i class="legend-heavy"></i>Zware bui</span>
+              <span><i class="legend-city"></i>Jouw buurt</span>
+            </div>
+          </article>
+
+          <aside class="weather-side">
+            <article class="summary-weather-card">
+              <span>Nu</span>
+              <strong>Bewolkt, buien dichtbij</strong>
+              <p>Over ongeveer 25 minuten neemt de kans op regen toe. Wind uit zuidwest, matig.</p>
+              <div class="weather-metrics">
+                <div><b>76%</b><small>regen</small></div>
+                <div><b>4 Bft</b><small>wind</small></div>
+                <div><b>9 km</b><small>zicht</small></div>
+              </div>
+            </article>
+
+            <article class="warning-card">
+              <span>Weeradvies</span>
+              <strong>Neem een regenjas mee</strong>
+              <p>De meeste buien trekken tussen 19:00 en 20:00 over de omgeving.</p>
+            </article>
+          </aside>
+        </section>
+
+        <section class="rain-section" aria-labelledby="rain-title">
+          <div class="section-row compact">
+            <div>
+              <p class="eyebrow dark">Neerslag</p>
+              <h2 id="rain-title">Komende 2 uur</h2>
+            </div>
+            <span class="update-label">Bijgewerkt 18:40</span>
+          </div>
+          <div class="rain-bars" aria-label="Neerslagverwachting per kwartier">
+            <div><span style="height: 18%"></span><small>18:45</small></div>
+            <div><span style="height: 26%"></span><small>19:00</small></div>
+            <div><span style="height: 48%"></span><small>19:15</small></div>
+            <div><span style="height: 82%"></span><small>19:30</small></div>
+            <div><span style="height: 64%"></span><small>19:45</small></div>
+            <div><span style="height: 35%"></span><small>20:00</small></div>
+            <div><span style="height: 14%"></span><small>20:15</small></div>
+            <div><span style="height: 8%"></span><small>20:30</small></div>
+          </div>
+        </section>
+
+        <section class="forecast-section" aria-label="Weerverwachting">
+          <article class="forecast-card">
+            <span>19:00</span>
+            <strong>17°</strong>
+            <p>lichte regen</p>
+          </article>
+          <article class="forecast-card active">
+            <span>20:00</span>
+            <strong>16°</strong>
+            <p>stevige bui</p>
+          </article>
+          <article class="forecast-card">
+            <span>21:00</span>
+            <strong>15°</strong>
+            <p>droger</p>
+          </article>
+          <article class="forecast-card">
+            <span>22:00</span>
+            <strong>15°</strong>
+            <p>bewolkt</p>
+          </article>
+        </section>
+
+        <section class="daily-section" aria-labelledby="daily-title">
+          <div class="section-row compact">
+            <div>
+              <p class="eyebrow dark">Vooruitzicht</p>
+              <h2 id="daily-title">5 dagen vooruit</h2>
+            </div>
+          </div>
+          <div class="daily-list">
+            <article><span>Vandaag</span><strong>17° / 12°</strong><p>Buien in de avond</p></article>
+            <article><span>Morgen</span><strong>19° / 13°</strong><p>Wisselend bewolkt</p></article>
+            <article><span>Woensdag</span><strong>21° / 14°</strong><p>Droog en zonnig</p></article>
+            <article><span>Donderdag</span><strong>18° / 12°</strong><p>Kans op regen</p></article>
+            <article><span>Vrijdag</span><strong>20° / 13°</strong><p>Rustig weer</p></article>
+          </div>
+        </section>
       </section>
     </main>
-    <nav class="bottom-nav" aria-label="Buurtmenu"><a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a><a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a><a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a><a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a><a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a><a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a></nav>
+
+    <nav class="bottom-nav" aria-label="Buurtmenu">
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a>
+    </nav>
+
     <script src="app.js"></script>
   </body>
 </html>
