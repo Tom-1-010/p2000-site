@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P2000 Maasregio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">P2000 overzicht</p>
+        <h1>Live meldingen Maasregio</h1>
+      </div>
+      <div class="topbar-status" aria-label="Systeemstatus">
+        <span class="status-dot"></span>
+        <span>Online</span>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="control-panel" aria-labelledby="filters-title">
+        <div class="section-heading">
+          <h2 id="filters-title">Filters</h2>
+          <p>Toon meldingen per discipline, prioriteit en plaats.</p>
+        </div>
+
+        <div class="filter-grid">
+          <label>
+            Discipline
+            <select id="disciplineFilter">
+              <option value="alle">Alle disciplines</option>
+              <option value="brandweer">Brandweer</option>
+              <option value="ambulance">Ambulance</option>
+              <option value="politie">Politie</option>
+            </select>
+          </label>
+
+          <label>
+            Prioriteit
+            <select id="priorityFilter">
+              <option value="alle">Alle prioriteiten</option>
+              <option value="P1">P1</option>
+              <option value="P2">P2</option>
+              <option value="P3">P3</option>
+            </select>
+          </label>
+
+          <label>
+            Plaats
+            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis" />
+          </label>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Samenvatting">
+        <article class="summary-card">
+          <span class="summary-label">Totaal</span>
+          <strong id="totalCount">0</strong>
+        </article>
+        <article class="summary-card urgent">
+          <span class="summary-label">P1 meldingen</span>
+          <strong id="p1Count">0</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">Laatste update</span>
+          <strong id="lastUpdate">--:--</strong>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <section class="card" aria-labelledby="meldingen-title">
+          <div class="section-heading compact">
+            <h2 id="meldingen-title">Meldingen</h2>
+            <p>Recente alarmeringen in overzichtelijke volgorde.</p>
+          </div>
+          <div id="messagesList" class="messages-list"></div>
+        </section>
+
+        <aside class="card detail-card" aria-labelledby="details-title">
+          <div class="section-heading compact">
+            <h2 id="details-title">Details</h2>
+            <p>Selecteer een melding voor meer informatie.</p>
+          </div>
+          <div id="messageDetails" class="message-details empty-state">
+            Geen melding geselecteerd.
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
