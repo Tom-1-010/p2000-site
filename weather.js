@@ -68,8 +68,12 @@ const elements = {
   apiNotice: document.querySelector('#apiNotice'),
   forecastButton: document.querySelector('#forecastButton'),
   radarStatus: document.querySelector('#radarStatus'),
-  rainCells: [...document.querySelectorAll('.rain-cell')],
+  rainPeakText: document.querySelector('#rainPeakText'),
 };
+
+let weatherMap;
+let weatherMarker;
+let rainCircle;
 
 function round(value) {
   return Number.isFinite(value) ? Math.round(value) : '--';
@@ -141,12 +145,54 @@ function showNotice(message) {
   elements.apiNotice.textContent = message || '';
 }
 
-function setRainMapIntensity(maxRainChance) {
-  const intensity = Math.min(1, Math.max(0.18, maxRainChance / 100));
-  elements.rainCells.forEach((cell, index) => {
-    const multiplier = [0.55, 0.9, 0.38][index] || 0.4;
-    cell.style.opacity = String(Math.max(0.12, intensity * multiplier));
+function initMap() {
+  const mapElement = document.querySelector('#weatherMap');
+  if (!mapElement || !window.L || weatherMap) return;
+
+  weatherMap = L.map(mapElement, {
+    zoomControl: true,
+    scrollWheelZoom: false,
+  }).setView([WEATHER_LOCATION.latitude, WEATHER_LOCATION.longitude], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap',
+  }).addTo(weatherMap);
+
+  weatherMarker = L.marker([WEATHER_LOCATION.latitude, WEATHER_LOCATION.longitude])
+    .addTo(weatherMap)
+    .bindPopup('Maassluis<br>Weerlocatie De Buurtwacht');
+
+  rainCircle = L.circle([WEATHER_LOCATION.latitude, WEATHER_LOCATION.longitude], {
+    radius: 2600,
+    color: '#1597ed',
+    weight: 1,
+    fillColor: '#34acfc',
+    fillOpacity: 0.08,
+  }).addTo(weatherMap);
+}
+
+function updateMap(data) {
+  if (!weatherMap || !rainCircle || !weatherMarker) return;
+
+  const rainChance = data.daily.precipitation_probability_max?.[0] ?? 0;
+  const rainNow = data.current.precipitation || data.current.rain || data.current.showers || 0;
+  const radius = 2200 + rainChance * 35;
+  const fillOpacity = Math.min(0.28, 0.06 + rainChance / 420);
+
+  rainCircle.setRadius(radius);
+  rainCircle.setStyle({
+    fillOpacity,
+    opacity: rainChance > 40 || rainNow > 0 ? 0.75 : 0.35,
   });
+
+  weatherMarker.setPopupContent(`
+    <strong>Maassluis</strong><br>
+    ${round(data.current.temperature_2m)}° · ${escapeHtml(weatherText(data.current.weather_code))}<br>
+    Regenkans vandaag: ${round(rainChance)}%
+  `);
+
+  setTimeout(() => weatherMap.invalidateSize(), 150);
 }
 
 function renderCurrent(data) {
@@ -160,28 +206,28 @@ function renderCurrent(data) {
   const visibility = data.hourly.visibility?.[0] ? Math.round(data.hourly.visibility[0] / 1000) : '--';
 
   elements.currentTemp.textContent = `${round(current.temperature_2m)}°`;
-  elements.currentDetails.textContent = `${text} · wind ${bft} Bft`;
+  elements.currentDetails.textContent = `${text} · voelt als ${round(current.apparent_temperature)}°`;
   elements.todaySummary.textContent = `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
-  elements.todayText.textContent = `Vandaag wordt het ongeveer ${round(daily.temperature_2m_max?.[0])}°. De kans op regen is ${round(rainChance)}%.`;
+  elements.todayText.textContent = `Vandaag ongeveer ${round(daily.temperature_2m_max?.[0])}°. Regenkans ${round(rainChance)}%. Wind ${bft} Bft uit ${direction}.`;
   elements.rainChance.textContent = `${round(rainChance)}%`;
   elements.windStrength.textContent = `${bft} Bft`;
   elements.windDirection.textContent = direction;
   elements.visibilityValue.textContent = `${visibility} km`;
-  elements.weatherUpdated.textContent = `${formatTime(current.time)} bijgewerkt`;
-  elements.forecastButton.textContent = 'Open-Meteo live';
-  elements.radarStatus.textContent = 'Live verwachting';
-  elements.intro.textContent = `Actuele verwachting voor ${WEATHER_LOCATION.name}. Temperatuur, neerslag en wind worden live opgehaald.`;
+  elements.weatherUpdated.textContent = `Bijgewerkt om ${formatTime(current.time)}`;
+  elements.forecastButton.textContent = 'Live';
+  elements.radarStatus.textContent = 'Kaart';
+  elements.intro.textContent = `Actueel weer, neerslag en wind voor ${WEATHER_LOCATION.name}.`;
 
   const rainNow = current.precipitation || current.rain || current.showers || 0;
   if (rainChance >= 70 || rainNow > 0.5) {
     elements.adviceTitle.textContent = 'Regenjas mee';
-    elements.adviceText.textContent = 'Er is duidelijk kans op regen. Check vooral de neerslagbalken hieronder.';
+    elements.adviceText.textContent = 'Er is duidelijk kans op regen. Kijk vooral naar de neerslagbalken.';
   } else if (wind >= 38) {
     elements.adviceTitle.textContent = 'Let op de wind';
     elements.adviceText.textContent = 'Er staat vrij veel wind. Houd hier rekening mee op de fiets.';
   } else {
-    elements.adviceTitle.textContent = 'Prima om op pad te gaan';
-    elements.adviceText.textContent = 'De verwachting ziet er rustig uit. Houd de buien rond de regio wel in de gaten.';
+    elements.adviceTitle.textContent = 'Rustig weerbeeld';
+    elements.adviceText.textContent = 'Geen grote bijzonderheden. Controleer de komende uren voor buien.';
   }
 }
 
@@ -190,13 +236,18 @@ function renderRainBars(data) {
   const probabilities = data.hourly.precipitation_probability.slice(0, 8);
   const rain = data.hourly.precipitation.slice(0, 8);
   const maxChance = Math.max(...probabilities.filter(Number.isFinite), 0);
+  const peakIndex = probabilities.indexOf(maxChance);
 
-  setRainMapIntensity(maxChance);
+  if (elements.rainPeakText) {
+    elements.rainPeakText.textContent = maxChance > 0
+      ? `Meeste kans rond ${formatTime(hours[peakIndex])}: ${round(maxChance)}%`
+      : 'Voorlopig weinig kans op regen';
+  }
 
   elements.rainBars.innerHTML = hours.map((time, index) => {
     const chance = probabilities[index] ?? 0;
     const rainAmount = rain[index] ?? 0;
-    const height = Math.max(8, Math.min(96, chance));
+    const height = Math.max(6, Math.min(96, chance));
     const title = `${chance}% kans, ${rainAmount.toFixed(1)} mm`;
 
     return `
@@ -215,7 +266,7 @@ function renderHourly(data) {
     const temperature = data.hourly.temperature_2m[index];
     const code = data.hourly.weather_code[index];
     const chance = data.hourly.precipitation_probability[index] ?? 0;
-    const activeClass = index === 1 ? ' active' : '';
+    const activeClass = index === 0 ? ' active' : '';
 
     return `
       <article class="forecast-card${activeClass}">
@@ -263,6 +314,7 @@ async function loadWeather() {
     renderRainBars(data);
     renderHourly(data);
     renderDaily(data);
+    updateMap(data);
   } catch (error) {
     console.error(error);
     showNotice('Live weerdata kon niet worden geladen. De getoonde waarden blijven tijdelijk op de laatst bekende of voorbeeldstand staan.');
@@ -271,5 +323,6 @@ async function loadWeather() {
   }
 }
 
+initMap();
 loadWeather();
 setInterval(loadWeather, 10 * 60 * 1000);
