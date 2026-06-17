@@ -3,20 +3,123 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Buurtnieuws van De Buurtwacht toont lokaal nieuws uit Maassluis en omgeving via RSS-feeds." />
     <title>Buurtnieuws - De Buurtwacht</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260617-basis" />
+    <link rel="stylesheet" href="news.css?v=20260617-rss-1" />
   </head>
   <body data-page="buurtnieuws">
-    <header class="site-header"><nav class="navbar" aria-label="Hoofdnavigatie"><a class="brand" href="index.html"><span class="brand-mark">DB</span><span><strong>De Buurtwacht</strong><small>alles voor jouw buurt</small></span></a><a class="header-action" href="index.html">Terug naar home</a></nav></header>
+    <header class="app-header">
+      <nav class="appbar" aria-label="Hoofdnavigatie">
+        <a class="wordmark" href="index.html" aria-label="De Buurtwacht startpagina">
+          <span class="wordmark-de">De</span>
+          <span class="wordmark-name">Buurtwacht</span>
+        </a>
+        <a class="location-pill" href="mijnbuurt.html" aria-label="Mijn buurt instellen">
+          <span class="location-dot"></span>
+          Maassluis
+        </a>
+      </nav>
+    </header>
+
     <main>
-      <section class="page-hero page-width"><div class="page-panel"><span class="feature-icon icon-news" aria-hidden="true"></span><p class="label">Buurtnieuws</p><h1>Nieuws uit de directe omgeving.</h1><p>Een aparte pagina voor lokale berichten, korte updates en belangrijke informatie van gemeente, wijk en buurt.</p></div></section>
-      <section class="content-grid page-width">
-        <article class="info-card"><span>Vandaag</span><strong>Laatste berichten</strong><p>Hier komen actuele nieuwsberichten uit jouw buurt.</p></article>
-        <article class="info-card"><span>Gemeente</span><strong>Officiële updates</strong><p>Ruimte voor gemeentelijke mededelingen en wijknieuws.</p></article>
-        <article class="info-card"><span>Filter</span><strong>Per wijk sorteren</strong><p>Later uitbreidbaar met filters per plaats of wijk.</p></article>
+      <section class="news-shell page-width">
+        <section class="news-hero" aria-labelledby="news-title">
+          <div class="news-hero-copy">
+            <p class="eyebrow dark">Buurtnieuws</p>
+            <h1 id="news-title">Nieuws uit Maassluis en omgeving</h1>
+            <p id="newsIntro">Live lokaal nieuws via RSS. Berichten worden automatisch gesorteerd op actualiteit en buurtrelevantie.</p>
+          </div>
+          <div class="news-status-card" aria-live="polite">
+            <span class="small-label">Status</span>
+            <strong id="newsStatus">RSS laden</strong>
+            <p id="newsUpdated">Feeds worden opgehaald.</p>
+          </div>
+        </section>
+
+        <section class="news-tools" aria-label="Nieuws zoeken en filteren">
+          <label class="news-search">
+            <span class="news-search-icon" aria-hidden="true"></span>
+            <input id="newsSearch" type="search" placeholder="Zoek in buurtnieuws" autocomplete="off" />
+          </label>
+          <div class="news-filter-row" role="list" aria-label="Nieuwscategorieën">
+            <button class="news-filter active" type="button" data-filter="all">Alles</button>
+            <button class="news-filter" type="button" data-filter="maassluis">Maassluis</button>
+            <button class="news-filter" type="button" data-filter="waterweg">Waterweg</button>
+            <button class="news-filter" type="button" data-filter="veiligheid">Veiligheid</button>
+            <button class="news-filter" type="button" data-filter="gemeente">Gemeente</button>
+          </div>
+        </section>
+
+        <section class="news-dashboard" aria-label="Nieuws overzicht">
+          <article class="news-highlight" id="topStoryCard">
+            <span class="small-label">Belangrijkste bericht</span>
+            <h2>Nog geen bericht geladen</h2>
+            <p>De RSS-feeds worden opgehaald. Zodra er nieuws binnenkomt, verschijnt het meest relevante bericht hier.</p>
+          </article>
+
+          <aside class="news-summary-grid" aria-label="Samenvatting">
+            <article>
+              <span>Berichten</span>
+              <strong id="newsCount">0</strong>
+              <small>geladen</small>
+            </article>
+            <article>
+              <span>Bronnen</span>
+              <strong id="sourceCount">0</strong>
+              <small>actief</small>
+            </article>
+            <article>
+              <span>Laatste update</span>
+              <strong id="lastUpdateTime">--:--</strong>
+              <small>lokaal</small>
+            </article>
+          </aside>
+        </section>
+
+        <section class="news-feed-section" aria-labelledby="feed-title">
+          <div class="section-title-row news-section-title">
+            <div>
+              <span class="small-label">Laatste berichten</span>
+              <h2 id="feed-title">Actueel in de buurt</h2>
+            </div>
+            <button id="refreshNews" type="button" class="news-refresh">Ververs</button>
+          </div>
+
+          <div id="newsList" class="news-list" aria-live="polite">
+            <article class="news-item skeleton-news">
+              <div><span></span><strong></strong><p></p></div>
+            </article>
+            <article class="news-item skeleton-news">
+              <div><span></span><strong></strong><p></p></div>
+            </article>
+            <article class="news-item skeleton-news">
+              <div><span></span><strong></strong><p></p></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="news-source-panel" aria-label="Gebruikte RSS-bronnen">
+          <div>
+            <span class="small-label">Bronnen</span>
+            <h2>RSS-feeds</h2>
+            <p>De pagina gebruikt RSS-zoekfeeds voor Maassluis, Waterweg, gemeenteberichten en veiligheid. Bij blokkade door CORS probeert de pagina automatisch een proxy-fallback.</p>
+          </div>
+          <ul id="sourceList" class="source-list"></ul>
+        </section>
       </section>
     </main>
-    <nav class="bottom-nav" aria-label="Buurtmenu"><a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a><a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a><a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a><a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a><a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a><a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a></nav>
-    <script src="app.js"></script>
+
+    <nav class="bottom-nav" aria-label="Buurtmenu">
+      <a href="mijnbuurt.html" data-page="mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span class="nav-icon icon-house" aria-hidden="true"></span></a>
+      <a href="buurtnieuws.html" data-page="buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span class="nav-icon icon-news" aria-hidden="true"></span></a>
+      <a href="buurtmeldingen.html" data-page="buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span class="nav-icon icon-bell" aria-hidden="true"></span></a>
+      <a href="buurtweer.html" data-page="buurtweer" aria-label="Buurtweer" title="Buurtweer"><span class="nav-icon icon-weather" aria-hidden="true"></span></a>
+      <a href="buurtwerkzaamheden.html" data-page="buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span class="nav-icon icon-work" aria-hidden="true"></span></a>
+      <a href="buurttips.html" data-page="buurttips" aria-label="Buurttips" title="Buurttips"><span class="nav-icon icon-tip" aria-hidden="true"></span></a>
+    </nav>
+
+    <script src="app.js?v=20260617-basis"></script>
+    <script src="news.js?v=20260617-rss-1"></script>
   </body>
 </html>
