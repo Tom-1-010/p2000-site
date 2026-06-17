@@ -1,5 +1,5 @@
 body[data-page="buurtweer"] .weather-big-temp {
-  letter-spacing: .015em !important;
+  letter-spacing: .045em !important;
   font-variant-numeric: tabular-nums !important;
   font-feature-settings: "tnum" 1;
   margin-left: 0 !important;
@@ -7,6 +7,6 @@ body[data-page="buurtweer"] .weather-big-temp {
 
 @media (max-width: 430px) {
   body[data-page="buurtweer"] .weather-big-temp {
-    letter-spacing: .02em !important;
+    letter-spacing: .05em !important;
   }
 }
