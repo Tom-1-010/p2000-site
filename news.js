@@ -1,30 +1,41 @@
-const NEWS_LOCATION = 'Maassluis';
 const MAX_NEWS_ITEMS = 24;
 
 const NEWS_FEEDS = [
   {
-    id: 'maassluis',
-    label: 'Maassluis',
+    id: 'wos-maassluis',
+    label: 'WOS',
     category: 'maassluis',
-    url: 'https://news.google.com/rss/search?q=Maassluis&hl=nl&gl=NL&ceid=NL:nl',
+    url: 'https://news.google.com/rss/search?q=site%3Awos.nl%20Maassluis&hl=nl&gl=NL&ceid=NL:nl',
   },
   {
-    id: 'waterweg',
-    label: 'Waterweg',
+    id: 'rijnmond-maassluis',
+    label: 'Rijnmond',
     category: 'waterweg',
-    url: 'https://news.google.com/rss/search?q=Maassluis%20OR%20Vlaardingen%20OR%20Schiedam&hl=nl&gl=NL&ceid=NL:nl',
+    url: 'https://news.google.com/rss/search?q=site%3Arijnmond.nl%20Maassluis&hl=nl&gl=NL&ceid=NL:nl',
   },
   {
-    id: 'veiligheid',
-    label: 'Veiligheid',
-    category: 'veiligheid',
-    url: 'https://news.google.com/rss/search?q=Maassluis%20politie%20OR%20brandweer%20OR%20112&hl=nl&gl=NL&ceid=NL:nl',
-  },
-  {
-    id: 'gemeente',
-    label: 'Gemeente',
+    id: 'gemeente-maassluis',
+    label: 'Gemeente Maassluis',
     category: 'gemeente',
-    url: 'https://news.google.com/rss/search?q=Maassluis%20gemeente%20OR%20gemeenteraad%20OR%20werkzaamheden&hl=nl&gl=NL&ceid=NL:nl',
+    url: 'https://news.google.com/rss/search?q=site%3Amaassluis.nl%20Maassluis%20nieuws&hl=nl&gl=NL&ceid=NL:nl',
+  },
+  {
+    id: 'politie-maassluis',
+    label: 'Politie',
+    category: 'veiligheid',
+    url: 'https://news.google.com/rss/search?q=site%3Apolitie.nl%20Maassluis&hl=nl&gl=NL&ceid=NL:nl',
+  },
+  {
+    id: 'werkzaamheden-maassluis',
+    label: 'Werkzaamheden',
+    category: 'gemeente',
+    url: 'https://news.google.com/rss/search?q=Maassluis%20werkzaamheden%20OR%20wegafsluiting%20OR%20verkeer&hl=nl&gl=NL&ceid=NL:nl',
+  },
+  {
+    id: 'bekendmakingen-maassluis',
+    label: 'Bekendmakingen',
+    category: 'gemeente',
+    url: 'https://news.google.com/rss/search?q=Maassluis%20bekendmakingen%20vergunning&hl=nl&gl=NL&ceid=NL:nl',
   },
 ];
 
@@ -35,8 +46,13 @@ const LOCAL_TERMS = [
   'schiedam',
   'waterweg',
   'rijnmond',
-  'hoek van holland',
-  'rotterdam',
+  'wos',
+  'gemeente maassluis',
+  'politie',
+  'werkzaamheden',
+  'wegafsluiting',
+  'bekendmakingen',
+  'vergunning',
   'midden-delfland',
 ];
 
@@ -86,9 +102,7 @@ function formatTime(value) {
 function formatDate(value) {
   if (!value) return 'tijd onbekend';
   const date = new Date(value);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffHours = Math.floor(diffMs / 3600000);
+  const diffHours = Math.floor((Date.now() - date.getTime()) / 3600000);
 
   if (diffHours < 1) return 'zojuist';
   if (diffHours < 24) return `${diffHours} uur geleden`;
@@ -113,13 +127,17 @@ function cleanTitle(title) {
 }
 
 function relevanceScore(item) {
-  const haystack = `${item.title} ${item.description}`.toLowerCase();
+  const haystack = `${item.title} ${item.description} ${item.source}`.toLowerCase();
   let score = 0;
+
   LOCAL_TERMS.forEach((term) => {
     if (haystack.includes(term)) score += term === 'maassluis' ? 5 : 2;
   });
+
   if (item.category === 'maassluis') score += 3;
   if (item.category === 'veiligheid') score += 1;
+  if (item.feedLabel === 'WOS' || item.feedLabel === 'Gemeente Maassluis') score += 2;
+
   return score;
 }
 
@@ -142,11 +160,12 @@ function getLink(item) {
 function parseFeedXml(xmlText, feed) {
   const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
   const parserError = xml.querySelector('parsererror');
-  if (parserError) throw new Error(`Ongeldige RSS XML voor ${feed.label}`);
 
-  const entries = [...xml.querySelectorAll('item, entry')];
+  if (parserError) {
+    throw new Error(`Ongeldige RSS XML voor ${feed.label}`);
+  }
 
-  return entries.map((entry) => {
+  return [...xml.querySelectorAll('item, entry')].map((entry) => {
     const rawTitle = getText(entry, ['title']);
     const rawDescription = getText(entry, ['description', 'summary', 'content']);
     const pubDate = getText(entry, ['pubDate', 'published', 'updated']);
@@ -172,6 +191,7 @@ function parseFeedXml(xmlText, feed) {
 
 function uniqueItems(items) {
   const seen = new Set();
+
   return items.filter((item) => {
     const key = `${item.title.toLowerCase()}-${item.source.toLowerCase()}`;
     if (seen.has(key)) return false;
@@ -195,8 +215,10 @@ async function fetchTextWithFallback(url) {
     try {
       const response = await fetch(candidate, { cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
       const text = await response.text();
       if (!text || !text.trim()) throw new Error('Lege RSS-response');
+
       return text;
     } catch (error) {
       lastError = error;
@@ -213,6 +235,7 @@ async function loadFeed(feed) {
 
 function setLoadingState(isLoading) {
   newsState.loading = isLoading;
+
   if (elements.refresh) elements.refresh.disabled = isLoading;
   if (elements.status) elements.status.textContent = isLoading ? 'RSS laden' : 'Live nieuws';
   if (elements.updated) elements.updated.textContent = isLoading ? 'Feeds worden opgehaald.' : `Bijgewerkt om ${formatTime(new Date())}`;
@@ -220,6 +243,7 @@ function setLoadingState(isLoading) {
 
 function filteredItems() {
   const search = newsState.search.toLowerCase().trim();
+
   return newsState.allItems.filter((item) => {
     const matchesFilter = newsState.activeFilter === 'all' || item.category === newsState.activeFilter;
     const matchesSearch = !search || `${item.title} ${item.description} ${item.source}`.toLowerCase().includes(search);
@@ -232,6 +256,7 @@ function renderSources(successfulFeeds = []) {
 
   elements.sourceList.innerHTML = NEWS_FEEDS.map((feed) => {
     const active = successfulFeeds.includes(feed.id);
+
     return `
       <li>
         <span>${active ? 'Actief' : 'Fallback'}</span>
@@ -244,6 +269,7 @@ function renderSources(successfulFeeds = []) {
 
 function renderTopStory(items) {
   if (!elements.topStory) return;
+
   const topStory = [...items].sort((a, b) => b.score - a.score || new Date(b.publishedAt) - new Date(a.publishedAt))[0];
 
   if (!topStory) {
@@ -275,12 +301,13 @@ function renderList() {
 
   if (elements.count) elements.count.textContent = String(newsState.allItems.length);
   if (elements.lastUpdate) elements.lastUpdate.textContent = formatTime(new Date());
+
   renderTopStory(items);
 
   if (!elements.list) return;
 
   if (!items.length) {
-    elements.list.innerHTML = `<div class="empty-news">Geen nieuws gevonden voor deze filter of zoekterm.</div>`;
+    elements.list.innerHTML = '<div class="empty-news">Geen nieuws gevonden voor deze filter of zoekterm.</div>';
     return;
   }
 
@@ -304,6 +331,7 @@ function renderList() {
 
 async function loadNews() {
   setLoadingState(true);
+
   if (elements.list) {
     elements.list.innerHTML = `
       <article class="news-item skeleton-news"><div><span></span><strong></strong><p></p></div></article>
@@ -334,7 +362,7 @@ async function loadNews() {
     if (elements.status) elements.status.textContent = 'RSS niet bereikbaar';
     if (elements.updated) elements.updated.textContent = 'Geen feed kon worden geladen.';
     if (elements.list) {
-      elements.list.innerHTML = `<div class="error-news">RSS-feeds konden niet worden geladen. Dit komt meestal door CORS of een tijdelijke blokkade van de feed/proxy.</div>`;
+      elements.list.innerHTML = '<div class="error-news">RSS-feeds konden niet worden geladen. Dit komt meestal door CORS of een tijdelijke blokkade van de feed/proxy.</div>';
     }
     renderTopStory([]);
     return;
