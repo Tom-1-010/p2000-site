@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Buurtweer van De Buurtwacht toont regenradar, neerslagverwachting, uurverwachting en weeradvies voor jouw buurt." />
+    <meta name="description" content="Buurtweer van De Buurtwacht toont regenradar, neerslagverwachting en weerinformatie voor jouw buurt." />
     <title>Buurtweer - De Buurtwacht</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -23,32 +23,34 @@
 
     <main>
       <section class="weather-shell page-width">
-        <div class="weather-title-row">
+        <div class="weather-title-row natural">
           <div>
             <p class="eyebrow dark">Buurtweer</p>
-            <h1>Regen en weer voor jouw buurt.</h1>
-            <p>Bekijk snel of je droog op pad kunt, wanneer buien komen en wat het weer de komende uren doet.</p>
+            <h1>Weer in Maassluis</h1>
+            <p>Regen, wind en temperatuur voor de komende uren. Handig voordat je de deur uitgaat.</p>
           </div>
-          <div class="weather-now-pill">
-            <span class="big-icon icon-weather" aria-hidden="true"></span>
+          <div class="weather-now-pill plain">
             <div>
+              <span>Nu</span>
               <strong>17°</strong>
-              <p>Maassluis · nu</p>
+              <p>Bewolkt · wind 4 Bft</p>
             </div>
           </div>
         </div>
 
-        <section class="weather-dashboard" aria-label="Weeroverzicht">
-          <article class="radar-card">
-            <div class="radar-header">
+        <section class="weather-dashboard natural" aria-label="Weeroverzicht">
+          <article class="radar-card natural-card">
+            <div class="radar-header natural-header">
               <div>
-                <span>Live radar</span>
-                <h2>Buien in de regio</h2>
+                <span>Regenradar</span>
+                <h2>Buien rond Maassluis</h2>
               </div>
-              <button type="button">+60 min</button>
+              <button type="button">Komende 60 min</button>
             </div>
-            <div class="radar-map" aria-label="Voorbeeld regenradar rond Maassluis">
+            <div class="radar-map natural-map" aria-label="Voorbeeld regenradar rond Maassluis">
               <div class="map-grid"></div>
+              <div class="map-land land-one"></div>
+              <div class="map-land land-two"></div>
               <div class="map-water water-one"></div>
               <div class="map-water water-two"></div>
               <div class="rain-cell rain-a"></div>
@@ -58,42 +60,42 @@
               <div class="city-marker marker-rotterdam"><span></span>Rotterdam</div>
               <div class="city-marker marker-schiedam"><span></span>Schiedam</div>
             </div>
-            <div class="radar-legend">
-              <span><i class="legend-light"></i>Lichte regen</span>
-              <span><i class="legend-heavy"></i>Zware bui</span>
-              <span><i class="legend-city"></i>Jouw buurt</span>
+            <div class="radar-legend natural-legend">
+              <span><i class="legend-light"></i>lichte regen</span>
+              <span><i class="legend-heavy"></i>stevige bui</span>
+              <span><i class="legend-city"></i>jouw buurt</span>
             </div>
           </article>
 
-          <aside class="weather-side">
-            <article class="summary-weather-card">
-              <span>Nu</span>
-              <strong>Bewolkt, buien dichtbij</strong>
-              <p>Over ongeveer 25 minuten neemt de kans op regen toe. Wind uit zuidwest, matig.</p>
-              <div class="weather-metrics">
-                <div><b>76%</b><small>regen</small></div>
-                <div><b>4 Bft</b><small>wind</small></div>
+          <aside class="weather-side natural-side">
+            <article class="summary-weather-card simple-card">
+              <span>Vandaag</span>
+              <strong>Meestal bewolkt</strong>
+              <p>Later op de avond trekken een paar buien over de regio. Tussendoor zijn er droge momenten.</p>
+              <div class="weather-metrics natural-metrics">
+                <div><b>76%</b><small>kans op regen</small></div>
+                <div><b>4 Bft</b><small>zuidwest</small></div>
                 <div><b>9 km</b><small>zicht</small></div>
               </div>
             </article>
 
-            <article class="warning-card">
-              <span>Weeradvies</span>
-              <strong>Neem een regenjas mee</strong>
-              <p>De meeste buien trekken tussen 19:00 en 20:00 over de omgeving.</p>
+            <article class="warning-card simple-card">
+              <span>Advies</span>
+              <strong>Regenjas mee</strong>
+              <p>Vooral tussen 19:15 en 20:00 is de kans op regen groter.</p>
             </article>
           </aside>
         </section>
 
-        <section class="rain-section" aria-labelledby="rain-title">
+        <section class="rain-section natural-card" aria-labelledby="rain-title">
           <div class="section-row compact">
             <div>
               <p class="eyebrow dark">Neerslag</p>
               <h2 id="rain-title">Komende 2 uur</h2>
             </div>
-            <span class="update-label">Bijgewerkt 18:40</span>
+            <span class="update-label">18:40 bijgewerkt</span>
           </div>
-          <div class="rain-bars" aria-label="Neerslagverwachting per kwartier">
+          <div class="rain-bars natural-bars" aria-label="Neerslagverwachting per kwartier">
             <div><span style="height: 18%"></span><small>18:45</small></div>
             <div><span style="height: 26%"></span><small>19:00</small></div>
             <div><span style="height: 48%"></span><small>19:15</small></div>
@@ -105,40 +107,24 @@
           </div>
         </section>
 
-        <section class="forecast-section" aria-label="Weerverwachting">
-          <article class="forecast-card">
-            <span>19:00</span>
-            <strong>17°</strong>
-            <p>lichte regen</p>
-          </article>
-          <article class="forecast-card active">
-            <span>20:00</span>
-            <strong>16°</strong>
-            <p>stevige bui</p>
-          </article>
-          <article class="forecast-card">
-            <span>21:00</span>
-            <strong>15°</strong>
-            <p>droger</p>
-          </article>
-          <article class="forecast-card">
-            <span>22:00</span>
-            <strong>15°</strong>
-            <p>bewolkt</p>
-          </article>
+        <section class="forecast-section natural-forecast" aria-label="Weerverwachting per uur">
+          <article class="forecast-card"><span>19:00</span><strong>17°</strong><p>lichte regen</p></article>
+          <article class="forecast-card active"><span>20:00</span><strong>16°</strong><p>regen</p></article>
+          <article class="forecast-card"><span>21:00</span><strong>15°</strong><p>droger</p></article>
+          <article class="forecast-card"><span>22:00</span><strong>15°</strong><p>bewolkt</p></article>
         </section>
 
-        <section class="daily-section" aria-labelledby="daily-title">
+        <section class="daily-section natural-card" aria-labelledby="daily-title">
           <div class="section-row compact">
             <div>
               <p class="eyebrow dark">Vooruitzicht</p>
-              <h2 id="daily-title">5 dagen vooruit</h2>
+              <h2 id="daily-title">Komende dagen</h2>
             </div>
           </div>
-          <div class="daily-list">
+          <div class="daily-list natural-list">
             <article><span>Vandaag</span><strong>17° / 12°</strong><p>Buien in de avond</p></article>
-            <article><span>Morgen</span><strong>19° / 13°</strong><p>Wisselend bewolkt</p></article>
-            <article><span>Woensdag</span><strong>21° / 14°</strong><p>Droog en zonnig</p></article>
+            <article><span>Morgen</span><strong>19° / 13°</strong><p>Af en toe zon</p></article>
+            <article><span>Woensdag</span><strong>21° / 14°</strong><p>Meestal droog</p></article>
             <article><span>Donderdag</span><strong>18° / 12°</strong><p>Kans op regen</p></article>
             <article><span>Vrijdag</span><strong>20° / 13°</strong><p>Rustig weer</p></article>
           </div>
