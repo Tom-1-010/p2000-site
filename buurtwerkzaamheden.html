@@ -6,7 +6,7 @@
     <meta name="description" content="Buurtwerkzaamheden van De Buurtwacht toont werkzaamheden, verkeershinder en gemeentelijke bekendmakingen voor Maassluis." />
     <title>Buurtwerkzaamheden - De Buurtwacht</title>
     <link rel="stylesheet" href="styles.css?v=20260617-clean-1" />
-    <link rel="stylesheet" href="works.css?v=20260617-clean-1" />
+    <link rel="stylesheet" href="works.css?v=20260617-works-2" />
     <link rel="stylesheet" href="clean-ui.css?v=20260617-clean-1" />
     <link rel="stylesheet" href="app-theme.css?v=20260617-app-1" />
   </head>
@@ -26,16 +26,11 @@
 
     <main>
       <section class="works-shell page-width">
-        <section class="works-hero" aria-labelledby="works-title">
+        <section class="works-hero works-hero-simple" aria-labelledby="works-title">
           <div class="works-hero-copy">
-            <p class="eyebrow dark">Buurtwerkzaamheden</p>
-            <h1 id="works-title">Werkzaamheden en bekendmakingen</h1>
-            <p>Gemeentelijke updates over werkzaamheden, verkeer, vergunningen en officiële bekendmakingen in Maassluis.</p>
-          </div>
-          <div class="works-status-card" aria-live="polite">
-            <span class="small-label">Status</span>
-            <strong id="worksStatus">Updates laden</strong>
-            <p id="worksUpdated">Gemeentelijke berichten worden opgehaald.</p>
+            <p class="eyebrow dark">BuurtWerkzaamheden</p>
+            <h1 id="works-title">Werkzaamheden in Maassluis</h1>
+            <p>Werk, verkeer en bekendmakingen dichtbij.</p>
           </div>
         </section>
 
@@ -51,19 +46,11 @@
           </div>
         </section>
 
-        <section class="works-dashboard" aria-label="Overzicht werkzaamheden" style="grid-template-columns: minmax(0, 1fr);">
-          <article class="works-highlight" id="topWorkCard">
-            <span class="small-label">Meest relevant</span>
-            <h2>Nog geen informatie beschikbaar</h2>
-            <p>Zodra er informatie binnenkomt, verschijnt de meest relevante update hier.</p>
-          </article>
-        </section>
-
         <section class="works-feed-section" aria-labelledby="works-feed-title">
           <div class="section-title-row works-section-title">
             <div>
-              <span class="small-label">Gemeente</span>
-              <h2 id="works-feed-title">Actuele werkzaamheden en bekendmakingen</h2>
+              <span class="small-label">Laatste berichten</span>
+              <h2 id="works-feed-title">Actueel in je buurt</h2>
             </div>
             <button id="refreshWorks" type="button" class="works-refresh">Ververs</button>
           </div>
@@ -73,6 +60,7 @@
             <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
             <article class="works-item skeleton-works"><div><span></span><strong></strong><p></p></div></article>
           </div>
+          <nav id="worksPagination" class="works-pagination" aria-label="Pagina's met werkzaamheden"></nav>
         </section>
       </section>
     </main>
@@ -87,7 +75,7 @@
     </nav>
 
     <script src="app.js?v=20260617-clean-1"></script>
-    <script src="works.js?v=20260617-rss-1"></script>
+    <script src="works.js?v=20260617-page-1"></script>
     <script src="clean-copy.js?v=20260617-no-live-1"></script>
   </body>
 </html>
