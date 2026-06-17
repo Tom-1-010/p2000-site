@@ -1,6 +1,10 @@
-const messages = [
+const P2000_RSS_URL = 'http://p2000.brandweer-berkel-enschot.nl/homeassistant/rss.asp';
+const P2000_PROXY_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(P2000_RSS_URL)}`;
+const REFRESH_INTERVAL_MS = 60000;
+
+const fallbackMessages = [
   {
-    id: 1,
+    id: 'demo-1',
     time: '16:42',
     priority: 'P1',
     discipline: 'brandweer',
@@ -9,12 +13,12 @@ const messages = [
     area: 'Centrum',
     location: 'Lange Boonestraat, Maassluis',
     classification: 'Brand woning',
-    summary: 'Rookontwikkeling gemeld bij een woning. Hulpdiensten zijn opgeroepen.',
+    summary: 'Voorbeeldmelding: rookontwikkeling gemeld bij een woning.',
     units: ['TS 17-1231', 'RV 17-1251'],
-    status: 'Onderweg',
+    status: 'Voorbeelddata',
   },
   {
-    id: 2,
+    id: 'demo-2',
     time: '16:35',
     priority: 'P2',
     discipline: 'ambulance',
@@ -23,12 +27,12 @@ const messages = [
     area: 'Centrum',
     location: 'Hoogstraat, Schiedam',
     classification: 'Medisch incident',
-    summary: 'Ambulance gevraagd voor een persoon die hulp nodig heeft.',
+    summary: 'Voorbeeldmelding: ambulance gevraagd voor medische hulp.',
     units: ['Ambulance 17-121'],
-    status: 'Gekoppeld',
+    status: 'Voorbeelddata',
   },
   {
-    id: 3,
+    id: 'demo-3',
     time: '16:22',
     priority: 'P1',
     discipline: 'politie',
@@ -37,52 +41,20 @@ const messages = [
     area: 'Westwijk',
     location: 'Westhavenkade, Vlaardingen',
     classification: 'Assistentie',
-    summary: 'Ondersteuning gevraagd bij een lopende hulpverleningsmelding.',
+    summary: 'Voorbeeldmelding: politie gevraagd voor ondersteuning.',
     units: ['Eenheid 21.05', 'Eenheid 21.07'],
-    status: 'Ter plaatse',
+    status: 'Voorbeelddata',
   },
-  {
-    id: 4,
-    time: '16:11',
-    priority: 'P3',
-    discipline: 'brandweer',
-    title: 'Stormschade',
-    city: 'Rozenburg',
-    area: 'Oost',
-    location: 'Emmastraat, Rozenburg',
-    classification: 'Stormschade',
-    summary: 'Schade aan een dakrand gemeld. De situatie wordt gecontroleerd.',
-    units: ['TS 17-1431'],
-    status: 'In behandeling',
-  },
-  {
-    id: 5,
-    time: '15:58',
-    priority: 'P2',
-    discipline: 'brandweer',
-    title: 'Automatische brandmelding',
-    city: 'Maasland',
-    area: 'Dorp',
-    location: 'Stationsweg, Maasland',
-    classification: 'OMS',
-    summary: 'Automatische melding vanuit een gebouw.',
-    units: ['TS 17-1131'],
-    status: 'Controle',
-  },
-  {
-    id: 6,
-    time: '15:46',
-    priority: 'P2',
-    discipline: 'politie',
-    title: 'Verkeersongeval',
-    city: 'Schiedam',
-    area: 'Nieuwland',
-    location: 'Burgemeester Van Haarenlaan, Schiedam',
-    classification: 'Verkeer',
-    summary: 'Melding van een aanrijding met verkeershinder.',
-    units: ['Eenheid 21.11'],
-    status: 'Onderweg',
-  },
+];
+
+let messages = [...fallbackMessages];
+let selectedMessageId = messages[0]?.id ?? null;
+
+const knownCities = [
+  'Rotterdam', 'Schiedam', 'Vlaardingen', 'Maassluis', 'Rozenburg', 'Maasland',
+  'Capelle aan den IJssel', 'Krimpen aan den IJssel', 'Barendrecht', 'Ridderkerk',
+  'Spijkenisse', 'Nissewaard', 'Hellevoetsluis', 'Brielle', 'Oostvoorne', 'Rockanje',
+  'Hoek van Holland', 'Dordrecht', 'Zwijndrecht', 'Papendrecht', 'Sliedrecht',
 ];
 
 const menuButton = document.querySelector('#menuButton');
@@ -99,11 +71,114 @@ const activeArea = document.querySelector('#activeArea');
 const heroTotal = document.querySelector('#heroTotal');
 const heroPriority = document.querySelector('#heroPriority');
 const neighbourhoodGrid = document.querySelector('#neighbourhoodGrid');
+const apiStatus = document.querySelector('#apiStatus');
+const feedStatus = document.querySelector('#feedStatus');
 
-let selectedMessageId = messages[0]?.id ?? null;
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function setFeedStatus(text) {
+  if (apiStatus) apiStatus.textContent = text;
+  if (feedStatus) feedStatus.textContent = text;
+}
+
+function getXmlValue(item, tagName) {
+  return item.getElementsByTagName(tagName)[0]?.textContent?.trim() || '';
+}
+
+function normalizeDiscipline(value, messageText) {
+  const raw = `${value} ${messageText}`.toLowerCase();
+  if (raw.includes('brandweer') || raw.includes('brand')) return 'brandweer';
+  if (raw.includes('ambulance') || raw.includes('ambu') || raw.includes('lifeliner')) return 'ambulance';
+  if (raw.includes('politie')) return 'politie';
+  return 'overig';
+}
 
 function formatDiscipline(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1);
+  const labels = { brandweer: 'Brandweer', ambulance: 'Ambulance', politie: 'Politie', overig: 'Overig' };
+  return labels[value] || value;
+}
+
+function inferPriority(text) {
+  const match = String(text).toUpperCase().match(/\bP\s?([123])\b/);
+  return match ? `P${match[1]}` : 'P2';
+}
+
+function inferCity(text, regionName) {
+  const haystack = `${text} ${regionName}`.toLowerCase();
+  const found = knownCities.find((city) => haystack.includes(city.toLowerCase()));
+  return found || regionName || 'Onbekend';
+}
+
+function formatTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '--:--';
+  return date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+}
+
+function parseP2000Feed(xmlText) {
+  const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+  if (xml.querySelector('parsererror')) throw new Error('P2000-feed kon niet worden gelezen.');
+
+  return [...xml.querySelectorAll('item')].slice(0, 60).map((item, index) => {
+    const messageText = getXmlValue(item, 'message') || getXmlValue(item, 'title') || getXmlValue(item, 'description');
+    const regionName = getXmlValue(item, 'regname');
+    const disciplineRaw = getXmlValue(item, 'dienst');
+    const capcode = getXmlValue(item, 'code');
+    const published = getXmlValue(item, 'published') || getXmlValue(item, 'pubDate');
+    const city = inferCity(messageText, regionName);
+    const discipline = normalizeDiscipline(disciplineRaw, messageText);
+    const priority = inferPriority(messageText);
+
+    return {
+      id: `live-${published || index}-${capcode || index}`,
+      time: formatTime(published),
+      priority,
+      discipline,
+      title: messageText || 'P2000-melding',
+      city,
+      area: regionName || city,
+      location: messageText || city,
+      classification: disciplineRaw || 'P2000',
+      summary: messageText || 'Live P2000-melding zonder extra omschrijving.',
+      units: capcode ? [capcode] : ['Capcode onbekend'],
+      status: 'Live P2000',
+    };
+  });
+}
+
+async function loadP2000Feed() {
+  setFeedStatus('P2000-feed laden...');
+  const urls = window.location.protocol === 'http:' ? [P2000_RSS_URL, P2000_PROXY_URL] : [P2000_PROXY_URL];
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const xmlText = await response.text();
+      const liveMessages = parseP2000Feed(xmlText);
+
+      if (!liveMessages.length) throw new Error('Geen meldingen in feed.');
+      messages = liveMessages;
+      selectedMessageId = messages[0].id;
+      setFeedStatus('Live P2000-feed');
+      renderMessages();
+      return;
+    } catch (error) {
+      console.warn('P2000-feed niet geladen via', url, error);
+    }
+  }
+
+  messages = [...fallbackMessages];
+  selectedMessageId = messages[0]?.id ?? null;
+  setFeedStatus('Fallback voorbeelddata');
+  renderMessages();
 }
 
 function getHighestPriority(items) {
@@ -161,7 +236,7 @@ function renderMessages() {
   if (!filteredMessages.length) {
     messagesList.innerHTML = '<div class="no-results">Geen meldingen gevonden met deze filters.</div>';
     messageDetails.className = 'message-details empty-state';
-    messageDetails.textContent = 'Selecteer een andere plaats, discipline of prioriteit.';
+    messageDetails.textContent = 'Selecteer een andere stad, plaats, discipline of prioriteit.';
     return;
   }
 
@@ -174,14 +249,14 @@ function renderMessages() {
     const priorityClass = message.priority.toLowerCase();
 
     return `
-      <button class="message-card${activeClass}" type="button" data-id="${message.id}">
-        <span class="priority-badge ${priorityClass}">${message.priority}</span>
+      <button class="message-card${activeClass}" type="button" data-id="${escapeHtml(message.id)}">
+        <span class="priority-badge ${priorityClass}">${escapeHtml(message.priority)}</span>
         <span class="message-main">
-          <strong>${message.title}</strong>
-          <span class="message-meta">${formatDiscipline(message.discipline)} · ${message.city} · ${message.area}</span>
-          <span class="message-tags"><span>${message.classification}</span><span>${message.status}</span></span>
+          <strong>${escapeHtml(message.title)}</strong>
+          <span class="message-meta">${escapeHtml(formatDiscipline(message.discipline))} · ${escapeHtml(message.city)} · ${escapeHtml(message.area)}</span>
+          <span class="message-tags"><span>${escapeHtml(message.classification)}</span><span>${escapeHtml(message.status)}</span></span>
         </span>
-        <span class="message-time">${message.time}</span>
+        <span class="message-time">${escapeHtml(message.time)}</span>
       </button>
     `;
   }).join('');
@@ -199,14 +274,14 @@ function renderDetails(message) {
   messageDetails.className = 'message-details';
   messageDetails.innerHTML = `
     <div class="detail-hero">
-      <span>${message.priority} · ${formatDiscipline(message.discipline)}</span>
-      <h3>${message.title}</h3>
-      <p>${message.summary}</p>
+      <span>${escapeHtml(message.priority)} · ${escapeHtml(formatDiscipline(message.discipline))}</span>
+      <h3>${escapeHtml(message.title)}</h3>
+      <p>${escapeHtml(message.summary)}</p>
     </div>
-    <div class="detail-row"><span class="detail-label">Locatie</span><span class="detail-value">${message.location}</span></div>
-    <div class="detail-row"><span class="detail-label">Classificatie</span><span>${message.classification}</span></div>
-    <div class="detail-row"><span class="detail-label">Status</span><span>${message.status}</span></div>
-    <div class="detail-row"><span class="detail-label">Eenheden</span><span>${message.units.join(', ')}</span></div>
+    <div class="detail-row"><span class="detail-label">Locatie / tekst</span><span class="detail-value">${escapeHtml(message.location)}</span></div>
+    <div class="detail-row"><span class="detail-label">Classificatie</span><span>${escapeHtml(message.classification)}</span></div>
+    <div class="detail-row"><span class="detail-label">Status</span><span>${escapeHtml(message.status)}</span></div>
+    <div class="detail-row"><span class="detail-label">Capcodes / eenheden</span><span>${escapeHtml(message.units.join(', '))}</span></div>
   `;
 }
 
@@ -219,8 +294,8 @@ function renderNeighbourhoodGrid() {
     return `
       <article class="area-card">
         <span class="area-count">${count} meldingen</span>
-        <strong>${city}</strong>
-        <p>Hoogste prioriteit: ${priority}. Betrokken disciplines: ${disciplines}.</p>
+        <strong>${escapeHtml(city)}</strong>
+        <p>Hoogste prioriteit: ${escapeHtml(priority)}. Betrokken disciplines: ${escapeHtml(disciplines)}.</p>
       </article>
     `;
   }).join('');
@@ -231,7 +306,7 @@ function renderNeighbourhoodGrid() {
 messagesList.addEventListener('click', (event) => {
   const item = event.target.closest('.message-card');
   if (!item) return;
-  selectedMessageId = Number(item.dataset.id);
+  selectedMessageId = item.dataset.id;
   renderMessages();
 });
 
@@ -253,3 +328,5 @@ mainMenu.addEventListener('click', (event) => {
 });
 
 renderMessages();
+loadP2000Feed();
+setInterval(loadP2000Feed, REFRESH_INTERVAL_MS);
