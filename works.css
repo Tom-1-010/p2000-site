@@ -34,19 +34,22 @@
   gap: 10px;
 }
 
-.works-item.is-featured {
+.works-item.is-featured,
+.works-list > .works-item:first-child:not(.skeleton-works) {
   position: relative;
-  padding: 18px !important;
+  padding: 20px !important;
   overflow: hidden;
-  border: 2px solid rgba(52, 172, 252, .9) !important;
-  border-left: 9px solid #34acfc !important;
+  border: 3px solid #34acfc !important;
+  border-left: 10px solid #102f85 !important;
   background:
-    radial-gradient(circle at 92% 12%, rgba(52, 172, 252, .24) 0 74px, transparent 76px),
-    linear-gradient(180deg, rgba(226, 245, 255, .99), rgba(255,255,255,.97)) !important;
-  box-shadow: 0 22px 46px rgba(6, 46, 90, .22) !important;
+    radial-gradient(circle at 92% 12%, rgba(52, 172, 252, .32) 0 78px, transparent 80px),
+    linear-gradient(180deg, #dff3ff, #ffffff) !important;
+  box-shadow: 0 24px 52px rgba(6, 46, 90, .28) !important;
+  transform: translateY(-1px);
 }
 
-.works-item.is-featured::before {
+.works-item.is-featured::before,
+.works-list > .works-item:first-child:not(.skeleton-works)::before {
   display: none;
 }
 
@@ -66,35 +69,58 @@
   text-transform: uppercase;
 }
 
-.works-item.is-featured .works-item-header {
+.works-list > .works-item:first-child:not(.skeleton-works) .works-item-header::before {
+  content: "Laatste bericht";
+  display: inline-flex;
+  width: max-content;
+  grid-column: 1 / -1;
+  margin-bottom: 9px;
+  padding: 8px 12px;
+  color: #fff;
+  background: #102f85;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(7, 42, 86, .2);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.works-item.is-featured .works-item-header,
+.works-list > .works-item:first-child:not(.skeleton-works) .works-item-header {
   align-items: flex-start;
 }
 
-.works-item.is-featured .works-item-source {
-  color: #0b64d8;
-  font-weight: 950;
+.works-item.is-featured .works-item-source,
+.works-list > .works-item:first-child:not(.skeleton-works) .works-item-source {
+  color: #0b64d8 !important;
+  font-weight: 950 !important;
 }
 
-.works-item.is-featured h3 {
+.works-item.is-featured h3,
+.works-list > .works-item:first-child:not(.skeleton-works) h3 {
   margin-top: 2px;
 }
 
-.works-item.is-featured h3 a {
+.works-item.is-featured h3 a,
+.works-list > .works-item:first-child:not(.skeleton-works) h3 a {
   color: #073060 !important;
-  font-size: 1.2em;
-  line-height: 1.1;
+  font-size: 1.24em !important;
+  line-height: 1.08 !important;
 }
 
-.works-item.is-featured p {
-  color: #294b70;
-  font-size: 15px;
-  line-height: 1.42;
+.works-item.is-featured p,
+.works-list > .works-item:first-child:not(.skeleton-works) p {
+  color: #1f4469 !important;
+  font-size: 15px !important;
+  line-height: 1.42 !important;
 }
 
-.works-item.is-featured .works-item-meta {
+.works-item.is-featured .works-item-meta,
+.works-list > .works-item:first-child:not(.skeleton-works) .works-item-meta {
   margin-top: 12px;
   padding-top: 10px;
-  border-top: 1px solid rgba(8, 48, 96, .1);
+  border-top: 1px solid rgba(8, 48, 96, .13);
 }
 
 .works-tag.hot {
@@ -103,7 +129,8 @@
   border-color: rgba(52, 172, 252, .42);
 }
 
-.works-item.is-featured .works-tag.hot {
+.works-item.is-featured .works-tag.hot,
+.works-list > .works-item:first-child:not(.skeleton-works) .works-tag {
   color: #fff !important;
   background: #34acfc !important;
   border-color: #34acfc !important;
@@ -156,18 +183,21 @@
     font-size: 22px;
   }
 
-  .works-item.is-featured {
-    padding: 16px !important;
-    border-left-width: 7px !important;
+  .works-item.is-featured,
+  .works-list > .works-item:first-child:not(.skeleton-works) {
+    padding: 17px !important;
+    border-left-width: 8px !important;
   }
 
-  .works-latest-label {
+  .works-latest-label,
+  .works-list > .works-item:first-child:not(.skeleton-works) .works-item-header::before {
     padding: 7px 10px;
     font-size: 11px;
   }
 
-  .works-item.is-featured h3 a {
-    font-size: 1.1em;
+  .works-item.is-featured h3 a,
+  .works-list > .works-item:first-child:not(.skeleton-works) h3 a {
+    font-size: 1.13em !important;
   }
 
   .works-page-button {
