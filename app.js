@@ -4,62 +4,56 @@ const messages = [
     time: '16:42',
     priority: 'P1',
     discipline: 'brandweer',
-    title: 'Gebouwbrand woning',
+    title: 'Woningbrand gemeld',
+    city: 'Maassluis',
+    area: 'Centrum',
     location: 'Lange Boonestraat, Maassluis',
-    classification: 'BR woning',
-    units: ['TS 17-1231', 'RV 17-1251', 'OVDB 17-9091'],
-    duration: '00:18:44',
-    logs: [
-      '16:42 - P2000 alarmering verzonden',
-      '16:43 - TS 17-1231 gealarmeerd',
-      '16:44 - RV 17-1251 toegevoegd',
-    ],
+    classification: 'Brand woning',
+    summary: 'Rookontwikkeling gemeld bij een woning. Hulpdiensten zijn opgeroepen.',
+    units: ['TS 17-1231', 'RV 17-1251'],
+    status: 'Onderweg',
   },
   {
     id: 2,
     time: '16:35',
     priority: 'P2',
     discipline: 'ambulance',
-    title: 'Onwelwording in winkel',
+    title: 'Medische melding winkelgebied',
+    city: 'Schiedam',
+    area: 'Centrum',
     location: 'Hoogstraat, Schiedam',
-    classification: 'A2 onwel',
-    units: ['17-121', '17-902'],
-    duration: '00:11:02',
-    logs: [
-      '16:35 - Melding aangemaakt',
-      '16:36 - Ambulance 17-121 gekoppeld',
-    ],
+    classification: 'Medisch incident',
+    summary: 'Ambulance gevraagd voor een persoon die hulp nodig heeft.',
+    units: ['Ambulance 17-121'],
+    status: 'Gekoppeld',
   },
   {
     id: 3,
     time: '16:22',
     priority: 'P1',
     discipline: 'politie',
-    title: 'Assistentie hulpdiensten',
+    title: 'Assistentie aan hulpdiensten',
+    city: 'Vlaardingen',
+    area: 'Westwijk',
     location: 'Westhavenkade, Vlaardingen',
-    classification: 'Assistentie ambulance',
-    units: ['RT 21.05', 'RT 21.07'],
-    duration: '00:27:18',
-    logs: [
-      '16:22 - Politie gekoppeld aan incident',
-      '16:24 - Eenheid ter plaatse gemeld',
-    ],
+    classification: 'Assistentie',
+    summary: 'Ondersteuning gevraagd bij een lopende hulpverleningsmelding.',
+    units: ['Eenheid 21.05', 'Eenheid 21.07'],
+    status: 'Ter plaatse',
   },
   {
     id: 4,
     time: '16:11',
     priority: 'P3',
     discipline: 'brandweer',
-    title: 'Stormschade dakrand',
+    title: 'Stormschade',
+    city: 'Rozenburg',
+    area: 'Oost',
     location: 'Emmastraat, Rozenburg',
-    classification: 'THV stormschade',
+    classification: 'Stormschade',
+    summary: 'Schade aan een dakrand gemeld. De situatie wordt gecontroleerd.',
     units: ['TS 17-1431'],
-    duration: '00:41:29',
-    logs: [
-      '16:11 - Melding ontvangen',
-      '16:13 - TS 17-1431 gealarmeerd',
-      '16:28 - Situatie veiliggesteld',
-    ],
+    status: 'In behandeling',
   },
   {
     id: 5,
@@ -67,17 +61,32 @@ const messages = [
     priority: 'P2',
     discipline: 'brandweer',
     title: 'Automatische brandmelding',
+    city: 'Maasland',
+    area: 'Dorp',
     location: 'Stationsweg, Maasland',
-    classification: 'OMS openbaar gebouw',
+    classification: 'OMS',
+    summary: 'Automatische melding vanuit een gebouw.',
     units: ['TS 17-1131'],
-    duration: '00:52:07',
-    logs: [
-      '15:58 - Automatische melding ontvangen',
-      '15:59 - TS 17-1131 gealarmeerd',
-    ],
+    status: 'Controle',
+  },
+  {
+    id: 6,
+    time: '15:46',
+    priority: 'P2',
+    discipline: 'politie',
+    title: 'Verkeersongeval',
+    city: 'Schiedam',
+    area: 'Nieuwland',
+    location: 'Burgemeester Van Haarenlaan, Schiedam',
+    classification: 'Verkeer',
+    summary: 'Melding van een aanrijding met verkeershinder.',
+    units: ['Eenheid 21.11'],
+    status: 'Onderweg',
   },
 ];
 
+const menuButton = document.querySelector('#menuButton');
+const mainMenu = document.querySelector('#mainMenu');
 const disciplineFilter = document.querySelector('#disciplineFilter');
 const priorityFilter = document.querySelector('#priorityFilter');
 const cityFilter = document.querySelector('#cityFilter');
@@ -86,6 +95,10 @@ const messageDetails = document.querySelector('#messageDetails');
 const totalCount = document.querySelector('#totalCount');
 const p1Count = document.querySelector('#p1Count');
 const lastUpdate = document.querySelector('#lastUpdate');
+const activeArea = document.querySelector('#activeArea');
+const heroTotal = document.querySelector('#heroTotal');
+const heroPriority = document.querySelector('#heroPriority');
+const neighbourhoodGrid = document.querySelector('#neighbourhoodGrid');
 
 let selectedMessageId = messages[0]?.id ?? null;
 
@@ -93,37 +106,62 @@ function formatDiscipline(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function getHighestPriority(items) {
+  if (items.some((message) => message.priority === 'P1')) return 'P1';
+  if (items.some((message) => message.priority === 'P2')) return 'P2';
+  if (items.some((message) => message.priority === 'P3')) return 'P3';
+  return 'Geen';
+}
+
+function countByCity(items) {
+  return items.reduce((accumulator, message) => {
+    accumulator[message.city] = (accumulator[message.city] || 0) + 1;
+    return accumulator;
+  }, {});
+}
+
+function getMostActiveCity(items) {
+  const sortedCities = Object.entries(countByCity(items)).sort((a, b) => b[1] - a[1]);
+  return sortedCities[0]?.[0] || '-';
+}
+
 function getFilteredMessages() {
   const discipline = disciplineFilter.value;
   const priority = priorityFilter.value;
-  const city = cityFilter.value.trim().toLowerCase();
+  const query = cityFilter.value.trim().toLowerCase();
 
   return messages.filter((message) => {
     const disciplineMatch = discipline === 'alle' || message.discipline === discipline;
     const priorityMatch = priority === 'alle' || message.priority === priority;
-    const cityMatch = city === '' || message.location.toLowerCase().includes(city);
+    const queryMatch =
+      query === '' ||
+      message.city.toLowerCase().includes(query) ||
+      message.area.toLowerCase().includes(query) ||
+      message.location.toLowerCase().includes(query) ||
+      message.title.toLowerCase().includes(query);
 
-    return disciplineMatch && priorityMatch && cityMatch;
+    return disciplineMatch && priorityMatch && queryMatch;
   });
 }
 
 function renderSummary(filteredMessages) {
   totalCount.textContent = String(filteredMessages.length);
   p1Count.textContent = String(filteredMessages.filter((message) => message.priority === 'P1').length);
-  lastUpdate.textContent = new Date().toLocaleTimeString('nl-NL', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  activeArea.textContent = getMostActiveCity(filteredMessages);
+  heroTotal.textContent = `${messages.length} meldingen`;
+  heroPriority.textContent = getHighestPriority(messages);
+  lastUpdate.textContent = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
 }
 
 function renderMessages() {
   const filteredMessages = getFilteredMessages();
   renderSummary(filteredMessages);
+  renderNeighbourhoodGrid();
 
   if (!filteredMessages.length) {
     messagesList.innerHTML = '<div class="no-results">Geen meldingen gevonden met deze filters.</div>';
     messageDetails.className = 'message-details empty-state';
-    messageDetails.textContent = 'Geen melding geselecteerd.';
+    messageDetails.textContent = 'Selecteer een andere plaats, discipline of prioriteit.';
     return;
   }
 
@@ -131,23 +169,22 @@ function renderMessages() {
     selectedMessageId = filteredMessages[0].id;
   }
 
-  messagesList.innerHTML = filteredMessages
-    .map((message) => {
-      const activeClass = message.id === selectedMessageId ? ' active' : '';
-      const priorityClass = message.priority.toLowerCase();
+  messagesList.innerHTML = filteredMessages.map((message) => {
+    const activeClass = message.id === selectedMessageId ? ' active' : '';
+    const priorityClass = message.priority.toLowerCase();
 
-      return `
-        <button class="message-item${activeClass}" type="button" data-id="${message.id}">
-          <span class="priority-badge ${priorityClass}">${message.priority}</span>
-          <span class="message-main">
-            <strong>${message.title}</strong>
-            <span class="message-meta">${formatDiscipline(message.discipline)} · ${message.location}</span>
-          </span>
-          <span class="message-time">${message.time}</span>
-        </button>
-      `;
-    })
-    .join('');
+    return `
+      <button class="message-card${activeClass}" type="button" data-id="${message.id}">
+        <span class="priority-badge ${priorityClass}">${message.priority}</span>
+        <span class="message-main">
+          <strong>${message.title}</strong>
+          <span class="message-meta">${formatDiscipline(message.discipline)} · ${message.city} · ${message.area}</span>
+          <span class="message-tags"><span>${message.classification}</span><span>${message.status}</span></span>
+        </span>
+        <span class="message-time">${message.time}</span>
+      </button>
+    `;
+  }).join('');
 
   renderDetails(messages.find((message) => message.id === selectedMessageId));
 }
@@ -155,48 +192,45 @@ function renderMessages() {
 function renderDetails(message) {
   if (!message) {
     messageDetails.className = 'message-details empty-state';
-    messageDetails.textContent = 'Geen melding geselecteerd.';
+    messageDetails.textContent = 'Selecteer een melding om details te bekijken.';
     return;
   }
 
   messageDetails.className = 'message-details';
   messageDetails.innerHTML = `
-    <div class="detail-row">
-      <span class="detail-label">Melding</span>
-      <span class="detail-value">${message.priority} · ${message.title}</span>
+    <div class="detail-hero">
+      <span>${message.priority} · ${formatDiscipline(message.discipline)}</span>
+      <h3>${message.title}</h3>
+      <p>${message.summary}</p>
     </div>
-    <div class="detail-row">
-      <span class="detail-label">Classificatie</span>
-      <span>${message.classification}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Adres</span>
-      <span>${message.location}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Gekoppelde eenheden</span>
-      <span>${message.units.join(', ')}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">Bezetduur</span>
-      <span>${message.duration}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-label">P2000 logs</span>
-      <ol class="log-list">
-        ${message.logs.map((line) => `<li>${line}</li>`).join('')}
-      </ol>
-    </div>
+    <div class="detail-row"><span class="detail-label">Locatie</span><span class="detail-value">${message.location}</span></div>
+    <div class="detail-row"><span class="detail-label">Classificatie</span><span>${message.classification}</span></div>
+    <div class="detail-row"><span class="detail-label">Status</span><span>${message.status}</span></div>
+    <div class="detail-row"><span class="detail-label">Eenheden</span><span>${message.units.join(', ')}</span></div>
   `;
 }
 
+function renderNeighbourhoodGrid() {
+  const citySummaries = Object.entries(countByCity(messages)).sort((a, b) => b[1] - a[1]).map(([city, count]) => {
+    const cityMessages = messages.filter((message) => message.city === city);
+    const priority = getHighestPriority(cityMessages);
+    const disciplines = [...new Set(cityMessages.map((message) => formatDiscipline(message.discipline)))].join(', ');
+
+    return `
+      <article class="area-card">
+        <span class="area-count">${count} meldingen</span>
+        <strong>${city}</strong>
+        <p>Hoogste prioriteit: ${priority}. Betrokken disciplines: ${disciplines}.</p>
+      </article>
+    `;
+  }).join('');
+
+  neighbourhoodGrid.innerHTML = citySummaries;
+}
+
 messagesList.addEventListener('click', (event) => {
-  const item = event.target.closest('.message-item');
-
-  if (!item) {
-    return;
-  }
-
+  const item = event.target.closest('.message-card');
+  if (!item) return;
   selectedMessageId = Number(item.dataset.id);
   renderMessages();
 });
@@ -204,6 +238,18 @@ messagesList.addEventListener('click', (event) => {
 [disciplineFilter, priorityFilter, cityFilter].forEach((input) => {
   input.addEventListener('input', renderMessages);
   input.addEventListener('change', renderMessages);
+});
+
+menuButton.addEventListener('click', () => {
+  const isOpen = mainMenu.classList.toggle('open');
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+});
+
+mainMenu.addEventListener('click', (event) => {
+  if (event.target.tagName === 'A') {
+    mainMenu.classList.remove('open');
+    menuButton.setAttribute('aria-expanded', 'false');
+  }
 });
 
 renderMessages();
