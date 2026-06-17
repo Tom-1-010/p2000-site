@@ -1,38 +1,42 @@
 body[data-page="buurtweer"] {
-  padding-bottom: 142px;
+  padding-bottom: 132px;
 }
 
 body[data-page="buurtweer"] .weather-shell {
   display: grid;
-  gap: 10px;
-  padding-top: 10px;
-  padding-bottom: 120px;
+  gap: 8px;
+  padding-top: 8px;
+  padding-bottom: 132px;
 }
 
 body[data-page="buurtweer"] .weather-toolbar {
-  margin-bottom: 0;
-}
-
-.weather-toolbar-compact {
   align-items: center;
-}
-
-.weather-toolbar-compact h1 {
   margin-bottom: 0;
 }
 
-.weather-toolbar-compact .eyebrow {
+body[data-page="buurtweer"] .weather-toolbar h1 {
+  margin-bottom: 0;
+  font-size: clamp(28px, 7vw, 38px);
+  line-height: 1.02;
+}
+
+body[data-page="buurtweer"] .weather-toolbar .eyebrow {
   margin-bottom: 2px;
 }
 
+body[data-page="buurtweer"] .update-label {
+  min-height: 28px;
+  padding: 0 9px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .weather-view-switch {
-  display: flex;
-  justify-content: flex-start;
-  margin: -2px 0 0;
+  display: block;
+  margin: 0;
   padding: 0;
   background: transparent;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -41,33 +45,35 @@ body[data-page="buurtweer"] .weather-toolbar {
 }
 
 .weather-switch-buttons {
-  display: inline-grid;
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2px;
-  width: min(100%, 330px);
+  width: min(100%, 300px);
   padding: 3px;
   background: #fff;
   border: 1px solid var(--line-dark);
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(24, 36, 56, .045);
+  border-radius: 11px;
+  box-shadow: 0 2px 8px rgba(24, 36, 56, .045);
 }
 
 .weather-switch-button {
-  min-height: 34px;
-  padding: 0 10px;
+  min-width: 0;
+  min-height: 31px;
+  padding: 0 8px;
   color: var(--muted);
   background: transparent;
   border: 0;
-  border-radius: 9px;
-  font-size: 13px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 900;
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .weather-switch-button.is-active {
   color: #fff;
   background: var(--navy);
-  box-shadow: 0 3px 10px rgba(24, 36, 56, .14);
+  box-shadow: 0 2px 8px rgba(24, 36, 56, .13);
 }
 
 .weather-switch-button:focus-visible {
@@ -75,48 +81,78 @@ body[data-page="buurtweer"] .weather-toolbar {
   outline-offset: 2px;
 }
 
-.weather-view-panel[hidden] {
+.weather-view-panel[hidden],
+.weather-rain-graph[hidden] {
   display: none !important;
 }
 
 .weather-today-panel,
 .weather-days-panel {
+  display: grid;
+  gap: 8px;
   max-width: 100%;
+  min-width: 0;
 }
 
-body[data-page="buurtweer"] .weather-main-card {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px 12px;
-  margin-bottom: 0;
-  padding: 12px;
-}
-
-body[data-page="buurtweer"] .weather-hero-main {
-  gap: 10px;
-}
-
-body[data-page="buurtweer"] .weather-icon-large {
-  width: 48px;
-  height: 48px;
+body[data-page="buurtweer"] .compact-card,
+body[data-page="buurtweer"] .map-card,
+body[data-page="buurtweer"] .plain-panel,
+body[data-page="buurtweer"] .metric-card,
+body[data-page="buurtweer"] .practical-panel,
+body[data-page="buurtweer"] .rain-timer-card,
+body[data-page="buurtweer"] .weather-hero {
   border-radius: 11px;
 }
 
+body[data-page="buurtweer"] .weather-main-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 9px 12px;
+  align-items: start;
+  margin-bottom: 0;
+  padding: 11px;
+  border-left-width: 3px;
+}
+
+body[data-page="buurtweer"] .weather-hero-main {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+body[data-page="buurtweer"] .weather-icon-large {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+body[data-page="buurtweer"] .weather-icon-large .weather-svg {
+  width: 27px;
+  height: 27px;
+}
+
 body[data-page="buurtweer"] .weather-hero-main strong {
-  font-size: clamp(25px, 4.8vw, 40px);
+  font-size: clamp(24px, 4.8vw, 34px);
+  line-height: 1.02;
 }
 
 body[data-page="buurtweer"] .weather-hero-main p {
-  max-width: 520px;
+  max-width: 100%;
   font-size: 13px;
-  line-height: 1.28;
+  line-height: 1.25;
 }
 
 body[data-page="buurtweer"] .weather-temp-block {
-  padding-left: 12px;
+  padding-left: 10px;
 }
 
 body[data-page="buurtweer"] .weather-temp-block strong {
-  font-size: clamp(48px, 10vw, 68px);
+  font-size: clamp(42px, 8vw, 58px);
+}
+
+body[data-page="buurtweer"] .weather-temp-block span {
+  font-size: 12px;
 }
 
 body[data-page="buurtweer"] .hero-facts {
@@ -124,7 +160,8 @@ body[data-page="buurtweer"] .hero-facts {
 }
 
 body[data-page="buurtweer"] .hero-facts span {
-  padding: 8px;
+  min-height: 50px;
+  padding: 7px 8px;
   background: #f9fbfd;
 }
 
@@ -132,33 +169,36 @@ body[data-page="buurtweer"] .hero-facts b {
   font-size: 18px;
 }
 
+body[data-page="buurtweer"] .hero-facts small {
+  font-size: 11px;
+}
+
 body[data-page="buurtweer"] .rain-timer-card {
-  grid-template-columns: auto minmax(0, 1fr) minmax(120px, .35fr);
-  gap: 10px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(112px, .32fr);
+  gap: 9px;
+  align-items: center;
   margin: 0;
   padding: 10px;
   border-left-width: 3px;
 }
 
 body[data-page="buurtweer"] .rain-timer-icon {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
 }
 
 body[data-page="buurtweer"] .rain-timer-title {
-  font-size: clamp(18px, 3vw, 24px);
+  font-size: clamp(18px, 3vw, 23px);
 }
 
-body[data-page="buurtweer"] .rain-timer-text {
-  font-size: 13px;
+body[data-page="buurtweer"] .rain-timer-text,
+body[data-page="buurtweer"] .rain-timer-meta {
+  font-size: 12px;
 }
 
 body[data-page="buurtweer"] .rain-timer-side {
   min-width: 0;
-}
-
-.weather-rain-graph[hidden] {
-  display: none !important;
 }
 
 .weather-rain-graph {
@@ -167,16 +207,28 @@ body[data-page="buurtweer"] .rain-timer-side {
 
 body[data-page="buurtweer"] .weather-hour-card {
   margin-bottom: 0;
+  padding: 10px;
+}
+
+body[data-page="buurtweer"] .card-header-row.compact {
+  margin-bottom: 7px;
+}
+
+body[data-page="buurtweer"] .card-header-row h2,
+body[data-page="buurtweer"] .section-title-row h2 {
+  font-size: 19px;
 }
 
 body[data-page="buurtweer"] .forecast-timeline {
-  gap: 7px;
+  gap: 6px;
+  padding-bottom: 2px;
 }
 
 body[data-page="buurtweer"] .timeline-item {
-  flex-basis: 74px;
-  min-height: 92px;
-  padding: 7px 6px;
+  flex: 0 0 66px;
+  min-height: 82px;
+  padding: 6px 5px;
+  border-radius: 9px;
 }
 
 body[data-page="buurtweer"] .timeline-item span {
@@ -184,60 +236,74 @@ body[data-page="buurtweer"] .timeline-item span {
 }
 
 body[data-page="buurtweer"] .timeline-item strong {
-  font-size: 20px;
+  font-size: 19px;
 }
 
 body[data-page="buurtweer"] .timeline-item small {
   font-size: 11px;
 }
 
+body[data-page="buurtweer"] .timeline-item .weather-svg-small {
+  width: 19px;
+  height: 19px;
+}
+
 .weather-detail-compact {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   margin-top: 0;
 }
 
 body[data-page="buurtweer"] .current-strip {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 body[data-page="buurtweer"] .metric-card {
-  min-height: 64px;
-  padding: 9px;
-  gap: 8px;
+  min-height: 58px;
+  padding: 8px;
+  gap: 7px;
 }
 
 body[data-page="buurtweer"] .metric-icon {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
+}
+
+body[data-page="buurtweer"] .metric-icon::before {
+  width: 16px;
+  height: 16px;
 }
 
 body[data-page="buurtweer"] .metric-card strong {
-  font-size: 19px;
+  font-size: 18px;
+}
+
+body[data-page="buurtweer"] .metric-card small {
+  font-size: 11px;
 }
 
 .weather-info-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 
 .weather-mini-panel {
   min-height: 0;
   margin-bottom: 0;
-  padding: 10px;
+  padding: 9px;
 }
 
 .weather-mini-panel strong,
 body[data-page="buurtweer"] .practical-title-row strong {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .weather-mini-panel p,
 body[data-page="buurtweer"] .practical-panel p {
-  font-size: 13px;
-  line-height: 1.28;
+  font-size: 12px;
+  line-height: 1.25;
 }
 
 .weather-map-row {
@@ -247,19 +313,21 @@ body[data-page="buurtweer"] .practical-panel p {
 
 .compact-map-card {
   margin-bottom: 0;
+  padding: 10px;
 }
 
 body[data-page="buurtweer"] .compact-map-card .weather-map {
-  height: 190px;
+  height: 170px;
 }
 
 body[data-page="buurtweer"] .map-note {
   margin-top: 6px;
+  font-size: 11px;
 }
 
 .weather-days-panel {
   margin-top: 0;
-  padding: 12px;
+  padding: 10px;
 }
 
 .weather-day-note {
@@ -272,47 +340,76 @@ body[data-page="buurtweer"] .map-note {
 
 #weatherDaysPanel .daily-list {
   display: grid;
-  gap: 8px;
+  gap: 7px;
   border: 0;
   border-radius: 0;
   overflow: visible;
 }
 
 #weatherDaysPanel .daily-list article {
+  grid-template-columns: minmax(78px, 1fr) 30px auto minmax(88px, 1.1fr);
+  gap: 8px;
+  padding: 9px 10px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(24, 36, 56, .04);
+  box-shadow: 0 2px 8px rgba(24, 36, 56, .035);
 }
 
 @media (max-width: 760px) {
+  body[data-page="buurtweer"] {
+    padding-bottom: 140px;
+  }
+
   body[data-page="buurtweer"] .weather-shell {
-    gap: 9px;
+    gap: 8px;
     padding-top: 8px;
     padding-bottom: 150px;
   }
 
   body[data-page="buurtweer"] .weather-toolbar {
+    display: flex;
+    gap: 10px;
     align-items: flex-start;
   }
 
   body[data-page="buurtweer"] .weather-toolbar h1 {
-    font-size: clamp(34px, 11vw, 48px);
+    font-size: clamp(30px, 9vw, 38px);
   }
 
   body[data-page="buurtweer"] .update-label {
-    margin-top: 4px;
+    flex: 0 0 auto;
+    max-width: 148px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .weather-switch-buttons {
+    width: 100%;
   }
 
   body[data-page="buurtweer"] .weather-main-card {
     grid-template-columns: 1fr;
-    padding: 12px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  body[data-page="buurtweer"] .weather-hero-main {
+    align-items: flex-start;
+  }
+
+  body[data-page="buurtweer"] .weather-hero-main strong {
+    font-size: clamp(26px, 7.5vw, 32px);
   }
 
   body[data-page="buurtweer"] .weather-temp-block {
     justify-items: start;
-    padding: 8px 0 0;
+    padding: 6px 0 0;
     border-top: 1px solid var(--line);
     border-left: 0;
+  }
+
+  body[data-page="buurtweer"] .weather-temp-block strong {
+    font-size: clamp(46px, 14vw, 54px);
   }
 
   body[data-page="buurtweer"] .hero-facts {
@@ -331,48 +428,6 @@ body[data-page="buurtweer"] .map-note {
     text-align: left;
   }
 
-  body[data-page="buurtweer"] .current-strip,
-  .weather-info-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  body[data-page="buurtweer"] .practical-panel {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 560px) {
-  body[data-page="buurtweer"] .weather-toolbar {
-    display: grid;
-    gap: 8px;
-  }
-
-  .weather-switch-buttons {
-    width: 100%;
-  }
-
-  body[data-page="buurtweer"] .weather-hero-main {
-    align-items: flex-start;
-  }
-
-  body[data-page="buurtweer"] .weather-hero-main strong {
-    font-size: 30px;
-  }
-
-  body[data-page="buurtweer"] .weather-temp-block strong {
-    font-size: 58px;
-  }
-
-  body[data-page="buurtweer"] .timeline-item {
-    flex-basis: 68px;
-    min-height: 86px;
-  }
-
-  body[data-page="buurtweer"] .weather-svg-small {
-    width: 20px;
-    height: 20px;
-  }
-
   body[data-page="buurtweer"] .current-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -381,9 +436,12 @@ body[data-page="buurtweer"] .map-note {
     grid-template-columns: 1fr;
   }
 
+  body[data-page="buurtweer"] .compact-map-card .weather-map {
+    height: 150px;
+  }
+
   #weatherDaysPanel .daily-list article {
-    grid-template-columns: 1fr 34px auto;
-    gap: 8px;
+    grid-template-columns: minmax(80px, 1fr) 28px auto;
   }
 
   #weatherDaysPanel .daily-list article p {
@@ -391,13 +449,68 @@ body[data-page="buurtweer"] .map-note {
   }
 }
 
-@media (max-width: 390px) {
-  body[data-page="buurtweer"] .hero-facts,
-  body[data-page="buurtweer"] .current-strip {
-    grid-template-columns: 1fr 1fr;
+@media (max-width: 430px) {
+  body[data-page="buurtweer"] .weather-shell {
+    gap: 7px;
+  }
+
+  body[data-page="buurtweer"] .weather-toolbar h1 {
+    font-size: clamp(28px, 8.5vw, 34px);
+  }
+
+  body[data-page="buurtweer"] .update-label {
+    max-width: 132px;
+    font-size: 11px;
+  }
+
+  .weather-switch-button {
+    min-height: 30px;
+    font-size: 12px;
+  }
+
+  body[data-page="buurtweer"] .weather-icon-large {
+    width: 40px;
+    height: 40px;
+  }
+
+  body[data-page="buurtweer"] .weather-hero-main strong {
+    font-size: 27px;
+  }
+
+  body[data-page="buurtweer"] .weather-hero-main p {
+    font-size: 12px;
+  }
+
+  body[data-page="buurtweer"] .weather-temp-block strong {
+    font-size: 50px;
+  }
+
+  body[data-page="buurtweer"] .hero-facts span {
+    min-height: 46px;
+  }
+
+  body[data-page="buurtweer"] .timeline-item {
+    flex-basis: 62px;
+    min-height: 78px;
   }
 
   body[data-page="buurtweer"] .metric-card {
     align-items: flex-start;
+    min-height: 54px;
+  }
+}
+
+@media (max-width: 360px) {
+  body[data-page="buurtweer"] .weather-toolbar {
+    display: grid;
+  }
+
+  body[data-page="buurtweer"] .update-label {
+    max-width: none;
+  }
+
+  body[data-page="buurtweer"] .hero-facts,
+  body[data-page="buurtweer"] .current-strip {
+    grid-template-columns: 1fr;
   }
 }
