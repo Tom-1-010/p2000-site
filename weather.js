@@ -5,6 +5,11 @@ const WEATHER_LOCATION = {
   timezone: 'Europe/Amsterdam',
 };
 
+const RAIN_AMOUNT_THRESHOLD = 0.1;
+const RAIN_PROBABILITY_THRESHOLD = 35;
+const RAIN_WEATHER_CODES = new Set([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99]);
+const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
+
 const WEATHER_API_URL = new URL('https://api.open-meteo.com/v1/forecast');
 WEATHER_API_URL.search = new URLSearchParams({
   latitude: String(WEATHER_LOCATION.latitude),
@@ -28,6 +33,7 @@ WEATHER_API_URL.search = new URLSearchParams({
     'precipitation_probability',
     'precipitation',
     'rain',
+    'showers',
     'weather_code',
     'cloud_cover',
     'wind_speed_10m',
@@ -78,11 +84,19 @@ const elements = {
   rainPeakText: document.querySelector('#rainPeakText'),
   weatherAttention: document.querySelector('#weatherAttention'),
   weatherAttentionText: document.querySelector('#weatherAttentionText'),
+  rainTimerCard: document.querySelector('#rainTimerCard'),
+  rainTimerTitle: document.querySelector('#rainTimerTitle'),
+  rainTimerText: document.querySelector('#rainTimerText'),
+  rainTimerMeta: document.querySelector('#rainTimerMeta'),
+  rainTimerProgress: document.querySelector('#rainTimerProgress'),
+  rainTimerEnd: document.querySelector('#rainTimerEnd'),
 };
 
 let weatherMap;
 let weatherMarker;
 let rainCircle;
+let latestWeatherData;
+let rainTimerInterval;
 
 function round(value) {
   return Number.isFinite(value) ? Math.round(value) : '--';
@@ -131,7 +145,7 @@ function weatherIconType(code) {
   if ([0].includes(number)) return 'sun';
   if ([1, 2].includes(number)) return 'partly';
   if ([3, 45, 48].includes(number)) return 'cloud';
-  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(number)) return 'rain';
+  if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(number)) return 'rain';
   if ([71, 73, 75, 77, 85, 86].includes(number)) return 'snow';
   if ([95, 96, 99].includes(number)) return 'storm';
   return 'cloud';
@@ -201,42 +215,140 @@ function nextHours(data, amount) {
       temperature: data.hourly.temperature_2m?.[index],
       rainChance: data.hourly.precipitation_probability?.[index] ?? 0,
       rainAmount: data.hourly.precipitation?.[index] ?? 0,
+      rain: data.hourly.rain?.[index] ?? 0,
+      showers: data.hourly.showers?.[index] ?? 0,
       weatherCode: data.hourly.weather_code?.[index],
       visibility: data.hourly.visibility?.[index],
     };
   });
 }
 
-function rainSituation(data) {
-  const current = data.current;
-  const hours = nextHours(data, 12);
-  const rainNow = current.precipitation || current.rain || current.showers || 0;
-  const nextRain = hours.find((hour, index) => index > 0 && (hour.rainChance >= 40 || hour.rainAmount > 0.1));
-  const maxTwoHourChance = Math.max(...hours.slice(0, 2).map((hour) => hour.rainChance).filter(Number.isFinite), 0);
-  const maxTwelveHourChance = Math.max(...hours.map((hour) => hour.rainChance).filter(Number.isFinite), 0);
+function rainAmountFromItem(item) {
+  return Math.max(
+    Number(item?.rainAmount ?? item?.precipitation ?? 0) || 0,
+    Number(item?.rain ?? 0) || 0,
+    Number(item?.showers ?? 0) || 0,
+  );
+}
 
-  if (rainNow > 0.1) {
+function isRainExpected(item) {
+  const chance = Number(item?.rainChance ?? item?.precipitationProbability ?? 0) || 0;
+  const code = Number(item?.weatherCode ?? item?.weather_code);
+  return rainAmountFromItem(item) > RAIN_AMOUNT_THRESHOLD
+    || (chance >= RAIN_PROBABILITY_THRESHOLD && RAIN_WEATHER_CODES.has(code));
+}
+
+function formatDuration(ms) {
+  const totalMinutes = Math.max(0, Math.round(ms / 60000));
+  if (totalMinutes < 1) return 'nu';
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours && minutes) return `${hours} uur ${minutes} min`;
+  if (hours) return `${hours} uur`;
+  return `${minutes} min`;
+}
+
+function rainTimerMeta(item) {
+  if (!item) return '';
+  const chance = Number(item.rainChance ?? item.precipitationProbability);
+  const amount = rainAmountFromItem(item);
+  const parts = [];
+  if (Number.isFinite(chance)) parts.push(`kans ${round(chance)}%`);
+  if (amount > 0) parts.push(`± ${amount.toFixed(1).replace('.', ',')} mm`);
+  return parts.join(' · ');
+}
+
+function getRainExpectation(data, now = new Date()) {
+  const forecastItems = nextHours(data, 12);
+  const current = data.current || {};
+  const currentItem = {
+    time: current.time || now.toISOString(),
+    rainAmount: current.precipitation ?? 0,
+    rain: current.rain ?? 0,
+    showers: current.showers ?? 0,
+    rainChance: forecastItems[0]?.rainChance ?? 0,
+    weatherCode: current.weather_code,
+  };
+  const futureItems = forecastItems.filter((item) => new Date(item.time).getTime() > now.getTime());
+  const rainingNow = isRainExpected(currentItem);
+
+  if (rainingNow) {
+    const dryMoment = futureItems.find((item) => !isRainExpected(item));
     return {
+      state: 'raining',
+      title: 'Het regent nu',
+      subtitle: dryMoment ? `Waarschijnlijk droog rond ${formatTime(dryMoment.time)}` : 'Einde regen nog onzeker',
+      meta: rainTimerMeta(currentItem),
+      endLabel: dryMoment ? formatTime(dryMoment.time) : 'onzeker',
+      progress: 100,
       headline: `Nu regen in ${WEATHER_LOCATION.name}`,
-      maxTwoHourChance,
-      maxTwelveHourChance,
-      nextRain,
-      rainNow,
+      target: dryMoment,
     };
   }
 
+  const nextRain = futureItems.find((item) => isRainExpected(item));
   if (nextRain) {
+    const rainTime = new Date(nextRain.time);
+    const diff = rainTime.getTime() - now.getTime();
     return {
+      state: 'soon',
+      title: `Regen verwacht over ${formatDuration(diff)}`,
+      subtitle: `Rond ${formatTime(nextRain.time)}${rainTimerMeta(nextRain) ? ` · ${rainTimerMeta(nextRain)}` : ''}`,
+      meta: rainTimerMeta(nextRain),
+      endLabel: formatTime(nextRain.time),
+      progress: Math.max(6, Math.min(100, (diff / TWELVE_HOURS_MS) * 100)),
       headline: `Bui verwacht rond ${formatTime(nextRain.time)}`,
-      maxTwoHourChance,
-      maxTwelveHourChance,
-      nextRain,
-      rainNow,
+      target: nextRain,
     };
   }
 
   return {
-    headline: maxTwelveHourChance <= 15 ? 'Voorlopig droog' : 'Droog komende uren',
+    state: 'dry',
+    title: 'Voorlopig droog',
+    subtitle: 'Komende 12 uur geen duidelijke regenverwachting',
+    meta: 'Komende 12 uur waarschijnlijk droog',
+    endLabel: '12 uur',
+    progress: 0,
+    headline: 'Voorlopig droog',
+    target: null,
+  };
+}
+
+function renderRainTimer(data) {
+  if (!elements.rainTimerCard || !data?.current || !data?.hourly) return;
+  const expectation = getRainExpectation(data);
+
+  elements.rainTimerCard.classList.remove('is-loading', 'is-raining', 'is-soon', 'is-dry', 'is-error');
+  elements.rainTimerCard.classList.add(`is-${expectation.state}`);
+  elements.rainTimerTitle.textContent = expectation.title;
+  elements.rainTimerText.textContent = expectation.subtitle;
+  elements.rainTimerMeta.textContent = expectation.meta || 'Actuele verwachting';
+  elements.rainTimerEnd.textContent = expectation.endLabel;
+  elements.rainTimerProgress.style.width = `${expectation.progress}%`;
+}
+
+function renderRainTimerError() {
+  if (!elements.rainTimerCard) return;
+  elements.rainTimerCard.classList.remove('is-loading', 'is-raining', 'is-soon', 'is-dry');
+  elements.rainTimerCard.classList.add('is-error');
+  elements.rainTimerTitle.textContent = 'Regenverwachting tijdelijk niet beschikbaar';
+  elements.rainTimerText.textContent = 'Probeer later opnieuw';
+  elements.rainTimerMeta.textContent = 'Geen live data';
+  elements.rainTimerEnd.textContent = '--:--';
+  elements.rainTimerProgress.style.width = '0%';
+}
+
+function rainSituation(data) {
+  const current = data.current;
+  const hours = nextHours(data, 12);
+  const rainNow = Math.max(current.precipitation || 0, current.rain || 0, current.showers || 0);
+  const nextRain = hours.find((hour, index) => index > 0 && isRainExpected(hour));
+  const maxTwoHourChance = Math.max(...hours.slice(0, 2).map((hour) => hour.rainChance).filter(Number.isFinite), 0);
+  const maxTwelveHourChance = Math.max(...hours.map((hour) => hour.rainChance).filter(Number.isFinite), 0);
+  const expectation = getRainExpectation(data);
+
+  return {
+    headline: expectation.headline || expectation.title,
     maxTwoHourChance,
     maxTwelveHourChance,
     nextRain,
@@ -256,7 +368,7 @@ function practicalAdvice(data, rainInfo, bft) {
     };
   }
 
-  if (rainInfo.rainNow > 0.1 || rainInfo.maxTwoHourChance >= 60) {
+  if (rainInfo.rainNow > RAIN_AMOUNT_THRESHOLD || rainInfo.maxTwoHourChance >= 60) {
     return {
       title: 'Paraplu meenemen',
       text: 'Er is nu of zeer binnenkort duidelijke kans op regen. Houd de regenbalken in de gaten.',
@@ -411,7 +523,7 @@ function renderRainBars(data) {
 
   elements.rainBars.innerHTML = hours.map((hour) => {
     const chance = hour.rainChance ?? 0;
-    const rainAmount = hour.rainAmount ?? 0;
+    const rainAmount = rainAmountFromItem(hour);
     const height = Math.max(6, Math.min(96, chance));
     const title = `${chance}% kans, ${Number(rainAmount).toFixed(1)} mm`;
 
@@ -478,6 +590,8 @@ async function loadWeather() {
       throw new Error('Onvolledige weerdata ontvangen.');
     }
 
+    latestWeatherData = data;
+    renderRainTimer(data);
     renderCurrent(data);
     renderRainBars(data);
     renderHourly(data);
@@ -485,6 +599,7 @@ async function loadWeather() {
     updateMap(data);
   } catch (error) {
     console.error(error);
+    renderRainTimerError();
     showNotice('Live weerdata kon niet worden geladen. Controleer later opnieuw; er wordt geen nepweer getoond.');
     if (elements.forecastButton) elements.forecastButton.textContent = 'Niet geladen';
     if (elements.radarStatus) elements.radarStatus.textContent = 'Geen live data';
@@ -492,6 +607,15 @@ async function loadWeather() {
   }
 }
 
+function startRainTimerClock() {
+  if (rainTimerInterval) clearInterval(rainTimerInterval);
+  rainTimerInterval = setInterval(() => {
+    if (latestWeatherData) renderRainTimer(latestWeatherData);
+  }, 60 * 1000);
+  window.addEventListener('beforeunload', () => clearInterval(rainTimerInterval), { once: true });
+}
+
 initMap();
 loadWeather();
+startRainTimerClock();
 setInterval(loadWeather, 10 * 60 * 1000);
