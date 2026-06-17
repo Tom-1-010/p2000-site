@@ -122,7 +122,8 @@ function windDirectionLabel(degrees) {
 function windBft(kmh) {
   if (!Number.isFinite(kmh)) return '--';
   const limits = [1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102, 117];
-  return limits.findIndex((limit) => kmh < limit);
+  const beaufort = limits.findIndex((limit) => kmh < limit);
+  return beaufort === -1 ? 12 : beaufort;
 }
 
 function escapeHtml(value) {
