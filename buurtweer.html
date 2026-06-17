@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Buurtweer van De Buurtwacht toont live weerdata, kaart, regenverwachting en weerinformatie voor jouw buurt." />
+    <meta name="description" content="Buurtweer van De Buurtwacht toont live weerdata, regenkans, wind, kaart en praktische weerinformatie voor jouw buurt." />
     <title>Buurtweer - De Buurtwacht</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQKYnKxIRqfZ5U7reFhVxjRY3QoVtq8=" crossorigin="" />
     <link rel="stylesheet" href="styles.css" />
@@ -27,66 +27,82 @@
         <div class="weather-toolbar">
           <div>
             <p class="eyebrow dark">Buurtweer</p>
-            <h1>Weer in Maassluis</h1>
-            <p id="weatherIntro">Live verwachting voor Maassluis wordt geladen.</p>
+            <h1>Weer voor Maassluis</h1>
+            <p id="weatherIntro">Regen, wind en temperatuur voor jouw buurt.</p>
           </div>
-          <span id="weatherUpdated" class="update-label">Laden...</span>
+          <span id="weatherUpdated" class="update-label">Live data laden</span>
         </div>
 
-        <section class="current-strip" aria-label="Actueel weer">
-          <article class="current-main-card">
+        <section class="weather-hero" aria-label="Belangrijkste weerinformatie">
+          <div class="weather-hero-main">
+            <span id="currentWeatherIcon" class="weather-icon weather-icon-large" aria-hidden="true"></span>
             <div>
-              <span class="small-label">Nu</span>
-              <strong id="currentTemp">--°</strong>
-              <p id="currentDetails">Weerdata laden...</p>
+              <span class="small-label">Nu belangrijk</span>
+              <strong id="rainHeadline">Weerdata laden</strong>
+              <p id="currentDetails">We halen de actuele verwachting voor Maassluis op.</p>
             </div>
-            <div class="current-advice">
-              <span id="adviceTitle">Even geduld</span>
-              <p id="adviceText">We halen de actuele verwachting op.</p>
-            </div>
-          </article>
-
-          <article class="metric-card"><span>Regen</span><strong id="rainChance">--%</strong><small>vandaag</small></article>
-          <article class="metric-card"><span>Wind</span><strong id="windStrength">-- Bft</strong><small id="windDirection">richting</small></article>
-          <article class="metric-card"><span>Zicht</span><strong id="visibilityValue">-- km</strong><small>buiten</small></article>
+          </div>
+          <div class="weather-temp-block">
+            <strong id="currentTemp">--°</strong>
+            <span id="feelsLikeText">Voelt als --°</span>
+          </div>
         </section>
 
-        <section class="weather-layout" aria-label="Weer en kaart">
-          <article class="map-card">
-            <div class="card-header-row">
-              <div>
-                <span id="radarStatus">Kaart</span>
-                <h2>Maassluis en omgeving</h2>
-              </div>
-              <button id="forecastButton" type="button">Live data</button>
-            </div>
-            <div id="weatherMap" class="weather-map" aria-label="Kaart van Maassluis en omgeving"></div>
-            <div class="map-note">
-              <span>OpenStreetMap</span>
-              <span>Marker toont huidige weerlocatie</span>
-            </div>
+        <section class="current-strip" aria-label="Actueel weer">
+          <article class="metric-card">
+            <span class="metric-icon icon-rain" aria-hidden="true"></span>
+            <div><span>Regen</span><strong id="rainChance">--%</strong><small>komende 2 uur</small></div>
           </article>
+          <article class="metric-card">
+            <span class="metric-icon icon-wind" aria-hidden="true"></span>
+            <div><span>Wind</span><strong id="windStrength">-- Bft</strong><small id="windDirection">richting</small></div>
+          </article>
+          <article class="metric-card">
+            <span class="metric-icon icon-thermo" aria-hidden="true"></span>
+            <div><span>Gevoel</span><strong id="feelsLikeMetric">--°</strong><small>buiten</small></div>
+          </article>
+          <article class="metric-card">
+            <span class="metric-icon icon-eye" aria-hidden="true"></span>
+            <div><span>Zicht</span><strong id="visibilityValue">-- km</strong><small>buiten</small></div>
+          </article>
+        </section>
 
-          <aside class="side-stack">
-            <article class="plain-panel">
-              <span>Vandaag</span>
-              <strong id="todaySummary">Weerdata laden...</strong>
-              <p id="todayText">De verwachting voor Maassluis wordt opgehaald.</p>
-            </article>
-            <article class="plain-panel">
-              <span>Buien</span>
-              <strong id="rainPeakText">Nog geen data</strong>
-              <p>De balken hieronder tonen de regenkans voor de komende uren.</p>
-            </article>
-          </aside>
+        <section class="practical-panel" aria-label="Praktisch weeradvies">
+          <div class="practical-title-row">
+            <span class="metric-icon icon-umbrella" aria-hidden="true"></span>
+            <div>
+              <span class="small-label">Praktisch voor nu</span>
+              <strong id="adviceTitle">Even geduld</strong>
+            </div>
+          </div>
+          <p id="adviceText">We bepalen of een jas, paraplu of extra opletten nodig is.</p>
+        </section>
+
+        <section class="timeline-section compact-card" aria-labelledby="timeline-title">
+          <div class="card-header-row compact">
+            <div>
+              <span class="small-label">Per uur</span>
+              <h2 id="timeline-title">Komende 12 uur</h2>
+            </div>
+            <small id="timelineHint">tijd · icoon · °C · regenkans</small>
+          </div>
+          <div id="hourlyForecast" class="forecast-timeline" aria-label="Weerverwachting komende 12 uur">
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+            <article class="timeline-item loading"><span>--:--</span><strong>--°</strong><small>--%</small></article>
+          </div>
         </section>
 
         <section class="rain-section compact-card" aria-labelledby="rain-title">
           <div class="card-header-row compact">
             <div>
               <span class="small-label">Neerslag</span>
-              <h2 id="rain-title">Komende uren</h2>
+              <h2 id="rain-title">Regenkans komende uren</h2>
             </div>
+            <span id="rainPeakText" class="section-status">Nog geen data</span>
           </div>
           <div id="rainBars" class="rain-bars" aria-label="Neerslagverwachting">
             <div><span style="height: 10%"></span><small>--:--</small></div>
@@ -101,11 +117,34 @@
           <p id="apiNotice" class="api-notice" hidden></p>
         </section>
 
-        <section id="hourlyForecast" class="forecast-section" aria-label="Weerverwachting per uur">
-          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
-          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
-          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
-          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
+        <section class="weather-layout" aria-label="Weer en kaart">
+          <article class="map-card">
+            <div class="card-header-row">
+              <div>
+                <span id="radarStatus">Kaart</span>
+                <h2>Maassluis en omgeving</h2>
+              </div>
+              <button id="forecastButton" type="button">Live</button>
+            </div>
+            <div id="weatherMap" class="weather-map" aria-label="Kaart van Maassluis en omgeving"></div>
+            <div class="map-note">
+              <span>Meetpunt Maassluis</span>
+              <span>Buienindicatie op basis van regenkans</span>
+            </div>
+          </article>
+
+          <aside class="side-stack">
+            <article class="plain-panel">
+              <span>Vandaag</span>
+              <strong id="todaySummary">Weerdata laden...</strong>
+              <p id="todayText">De verwachting voor Maassluis wordt opgehaald.</p>
+            </article>
+            <article class="plain-panel">
+              <span>Let op</span>
+              <strong id="weatherAttention">Geen bijzonderheden bekend</strong>
+              <p id="weatherAttentionText">Bij zware buien, onweer of harde wind tonen we hier een korte waarschuwing.</p>
+            </article>
+          </aside>
         </section>
 
         <section class="daily-section compact-card" aria-labelledby="daily-title">
