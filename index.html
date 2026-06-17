@@ -3,201 +3,160 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="112indewijk toont P2000-meldingen, veiligheidsupdates en praktische informatie in de wijk." />
-    <title>112indewijk - Meldingen in jouw buurt</title>
+    <meta name="description" content="De Buurtwacht is een rustig buurtplatform voor nieuws, meldingen, weer, werkzaamheden en praktische tips in je eigen wijk." />
+    <title>De Buurtwacht - Alles voor jouw buurt</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
       <nav class="navbar" aria-label="Hoofdnavigatie">
-        <a class="brand" href="#top" aria-label="112indewijk startpagina">
-          <span class="brand-mark">112</span>
+        <a class="brand" href="#home" aria-label="De Buurtwacht startpagina">
+          <span class="brand-mark">DB</span>
           <span>
-            <strong>112indewijk</strong>
-            <small>veiligheidsupdates dichtbij</small>
+            <strong>De Buurtwacht</strong>
+            <small>alles voor jouw buurt</small>
           </span>
         </a>
-
-        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainMenu">Menu</button>
-
-        <div class="nav-links" id="mainMenu">
-          <a href="#meldingen">Meldingen</a>
-          <a href="#buurt">Buurtbeeld</a>
-          <a href="#veiligheid">Veiligheid</a>
-          <a href="#contact">Contact</a>
-        </div>
+        <a class="header-action" href="#buurtmeldingen">Bekijk buurtmeldingen</a>
       </nav>
     </header>
 
-    <main id="top">
+    <main id="home">
       <section class="hero-section">
         <div class="hero-grid page-width">
           <div class="hero-copy">
-            <p class="label">Buurtplatform voor meldingen en veiligheid</p>
-            <h1>Bekijk wat er speelt in jouw wijk.</h1>
-            <p class="hero-text">112indewijk bundelt recente P2000-meldingen, buurtinformatie en praktische veiligheidstips in één rustige en duidelijke omgeving.</p>
+            <p class="label">Jouw buurt in één overzicht</p>
+            <h1>Weet wat er speelt rondom jouw straat.</h1>
+            <p class="hero-text">
+              De Buurtwacht brengt buurtinformatie samen: lokaal nieuws, meldingen, weer, werkzaamheden en praktische tips. Rustig, overzichtelijk en gemaakt voor mobiel gebruik.
+            </p>
             <div class="hero-actions">
-              <a class="button primary" href="#meldingen">Bekijk meldingen</a>
-              <a class="button secondary" href="#veiligheid">Veiligheidstips</a>
+              <a class="button primary" href="#mijnbuurt">Open MijnBuurt</a>
+              <a class="button secondary" href="#buurttips">Bekijk tips</a>
             </div>
           </div>
 
-          <aside class="hero-card" aria-label="Actuele status">
+          <aside class="hero-card" aria-label="Buurtstatus">
             <div class="status-line">
               <span class="live-dot"></span>
-              <span id="feedStatus">P2000-feed laden...</span>
+              <span>Buurtbeeld bijgewerkt</span>
             </div>
-            <h2>Maasregio</h2>
-            <p>Filter live meldingen op stad, plaats, wijk en discipline.</p>
+            <h2>Vandaag in de buurt</h2>
+            <p>Een compact overzicht van wat voor bewoners direct relevant is.</p>
             <dl class="quick-stats">
               <div>
-                <dt>Vandaag</dt>
-                <dd id="heroTotal">0 meldingen</dd>
+                <dt>Nieuws</dt>
+                <dd>4 updates</dd>
               </div>
               <div>
-                <dt>Hoogste prio</dt>
-                <dd id="heroPriority">Geen</dd>
+                <dt>Meldingen</dt>
+                <dd>3 actief</dd>
               </div>
             </dl>
           </aside>
         </div>
       </section>
 
-      <section class="page-width search-panel" aria-labelledby="zoek-title">
-        <div>
-          <p class="label">Zoeken in de buurt</p>
-          <h2 id="zoek-title">Filter meldingen</h2>
-        </div>
-        <div class="filter-grid">
-          <label>
-            Stad, plaats of wijk
-            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis, Schiedam of Rotterdam" />
-          </label>
-          <label>
-            Discipline
-            <select id="disciplineFilter">
-              <option value="alle">Alle disciplines</option>
-              <option value="brandweer">Brandweer</option>
-              <option value="ambulance">Ambulance</option>
-              <option value="politie">Politie</option>
-              <option value="overig">Overig</option>
-            </select>
-          </label>
-          <label>
-            Prioriteit
-            <select id="priorityFilter">
-              <option value="alle">Alle prioriteiten</option>
-              <option value="P1">P1</option>
-              <option value="P2">P2</option>
-              <option value="P3">P3</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section class="page-width stats-row" aria-label="Samenvatting meldingen">
-        <article class="stat-card">
-          <span>Getoond</span>
-          <strong id="totalCount">0</strong>
-        </article>
-        <article class="stat-card urgent">
-          <span>P1 meldingen</span>
-          <strong id="p1Count">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>Laatste update</span>
-          <strong id="lastUpdate">--:--</strong>
-        </article>
-        <article class="stat-card">
-          <span>Meest actief</span>
-          <strong id="activeArea">-</strong>
-        </article>
-      </section>
-
-      <section class="page-width content-layout" id="meldingen">
-        <section class="panel feed-panel" aria-labelledby="meldingen-title">
-          <div class="section-title-row">
-            <div>
-              <p class="label">Live overzicht</p>
-              <h2 id="meldingen-title">Recente meldingen</h2>
-            </div>
-            <span class="subtle-badge" id="apiStatus">Feed laden</span>
-          </div>
-          <div id="messagesList" class="messages-list"></div>
-        </section>
-
-        <aside class="panel detail-panel" aria-labelledby="details-title">
-          <div class="section-title-row compact">
-            <div>
-              <p class="label">Melding</p>
-              <h2 id="details-title">Details</h2>
-            </div>
-          </div>
-          <div id="messageDetails" class="message-details empty-state">Selecteer een melding om details te bekijken.</div>
-        </aside>
-      </section>
-
-      <section class="page-width neighbourhood-section" id="buurt">
+      <section class="page-width feature-grid" id="mijnbuurt" aria-labelledby="features-title">
         <div class="section-heading-center">
-          <p class="label">Buurtbeeld</p>
-          <h2>Wat speelt er in de omgeving?</h2>
-          <p>Een compact overzicht van meldingen per plaats op basis van de geladen P2000-data.</p>
+          <p class="label">Startpagina</p>
+          <h2 id="features-title">Alles wat je buurt nodig heeft</h2>
+          <p>Kies snel wat je wilt bekijken. Deze homepage is de basis voor het buurtplatform.</p>
         </div>
-        <div id="neighbourhoodGrid" class="neighbourhood-grid"></div>
+
+        <a class="feature-card highlight" href="#mijnbuurt">
+          <span class="feature-icon" aria-hidden="true">⌂</span>
+          <span class="feature-kicker">MijnBuurt</span>
+          <strong>Persoonlijk buurtbeeld</strong>
+          <p>Bekijk relevante updates voor jouw straat, wijk of woonplaats.</p>
+        </a>
+
+        <a class="feature-card" href="#buurtnieuws" id="buurtnieuws">
+          <span class="feature-icon" aria-hidden="true">◧</span>
+          <span class="feature-kicker">Buurtnieuws</span>
+          <strong>Laatste lokale berichten</strong>
+          <p>Nieuws uit de directe omgeving, zonder ruis van buiten de buurt.</p>
+        </a>
+
+        <a class="feature-card" href="#buurtmeldingen" id="buurtmeldingen">
+          <span class="feature-icon" aria-hidden="true">!</span>
+          <span class="feature-kicker">Buurtmeldingen</span>
+          <strong>Meldingen dichtbij</strong>
+          <p>Een rustige plek voor meldingen die bewoners kunnen helpen opletten.</p>
+        </a>
+
+        <a class="feature-card" href="#buurtweer" id="buurtweer">
+          <span class="feature-icon" aria-hidden="true">☁</span>
+          <span class="feature-kicker">Buurtweer</span>
+          <strong>Weer voor jouw wijk</strong>
+          <p>Praktische weersinformatie voor fietsen, wandelen, school en werk.</p>
+        </a>
+
+        <a class="feature-card" href="#buurtwerkzaamheden" id="buurtwerkzaamheden">
+          <span class="feature-icon" aria-hidden="true">◇</span>
+          <span class="feature-kicker">Buurtwerkzaamheden</span>
+          <strong>Werkzaamheden en hinder</strong>
+          <p>Wegafsluitingen, omleidingen, onderhoud en geplande werkzaamheden.</p>
+        </a>
+
+        <a class="feature-card" href="#buurttips" id="buurttips">
+          <span class="feature-icon" aria-hidden="true">✓</span>
+          <span class="feature-kicker">Buurttips</span>
+          <strong>Handige tips voor bewoners</strong>
+          <p>Veiligheid, afval, parkeren, buurtpreventie en praktische hulp.</p>
+        </a>
       </section>
 
-      <section class="safety-section" id="veiligheid">
-        <div class="page-width">
-          <div class="section-heading-center light">
-            <p class="label">Praktische informatie</p>
-            <h2>Veilig blijven zonder paniek</h2>
-            <p>112indewijk is informatief. Bel bij direct gevaar altijd 112.</p>
-          </div>
-          <div class="safety-grid">
-            <article class="safety-card">
-              <span class="card-kicker">Spoed</span>
-              <h3>Bel 112 bij direct gevaar</h3>
-              <p>Bij brand, levensgevaar, heterdaad of een medische noodsituatie bel je direct 112.</p>
-            </article>
-            <article class="safety-card">
-              <span class="card-kicker">Geen spoed</span>
-              <h3>Gebruik de juiste route</h3>
-              <p>Geen direct gevaar? Gebruik het reguliere nummer van politie, gemeente of zorgverlener.</p>
-            </article>
-            <article class="safety-card">
-              <span class="card-kicker">Buurt</span>
-              <h3>Let op, maar ga niet hinderen</h3>
-              <p>Blijf op afstand van hulpdiensten en deel geen herkenbare beelden van slachtoffers.</p>
-            </article>
-          </div>
+      <section class="page-width dashboard-section" aria-labelledby="dashboard-title">
+        <div class="dashboard-card main-card">
+          <p class="label">Uitgelicht</p>
+          <h2 id="dashboard-title">Rustige informatie, snel te begrijpen.</h2>
+          <p>
+            De Buurtwacht is bedoeld als laagdrempelig platform voor bewoners. Geen drukke alarmstijl, maar duidelijke blokken die helpen om snel te zien wat belangrijk is.
+          </p>
+        </div>
+        <div class="dashboard-list" aria-label="Voorbeeld updates">
+          <article>
+            <span>Vandaag</span>
+            <strong>Werkzaamheden aan hoofdroute</strong>
+            <p>Controleer je route als je door het centrum rijdt.</p>
+          </article>
+          <article>
+            <span>Tip</span>
+            <strong>Verlichting bij achterpaden</strong>
+            <p>Meld kapotte verlichting bij de gemeente of beheerder.</p>
+          </article>
+          <article>
+            <span>Weer</span>
+            <strong>Kans op stevige buien</strong>
+            <p>Zet losse spullen in tuin of balkon veilig weg.</p>
+          </article>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer" id="contact">
+    <footer class="site-footer">
       <div class="page-width footer-grid">
         <div>
-          <a class="brand footer-brand" href="#top">
-            <span class="brand-mark">112</span>
+          <a class="brand footer-brand" href="#home">
+            <span class="brand-mark">DB</span>
             <span>
-              <strong>112indewijk</strong>
-              <small>veiligheidsupdates dichtbij</small>
+              <strong>De Buurtwacht</strong>
+              <small>alles voor jouw buurt</small>
             </span>
           </a>
-          <p>Een rustig buurtplatform voor meldingen, duiding en praktische veiligheidsinformatie.</p>
-        </div>
-        <div>
-          <h2>P2000-feed</h2>
-          <p>De site probeert live P2000-data te laden. Als de browser of feed dit blokkeert, valt de site terug op voorbeelddata.</p>
+          <p>Een nette algemene homepage voor een buurtplatform. Verdere functies kunnen later per onderdeel worden uitgebouwd.</p>
         </div>
       </div>
     </footer>
 
-    <nav class="mobile-tabbar" aria-label="Mobiele navigatie">
-      <a href="#top">Home</a>
-      <a href="#meldingen">Meldingen</a>
-      <a href="#buurt">Buurt</a>
-      <a href="#veiligheid">Info</a>
+    <nav class="bottom-nav" aria-label="Buurtmenu">
+      <a href="#mijnbuurt" aria-label="MijnBuurt" title="MijnBuurt"><span aria-hidden="true">⌂</span></a>
+      <a href="#buurtnieuws" aria-label="Buurtnieuws" title="Buurtnieuws"><span aria-hidden="true">◧</span></a>
+      <a href="#buurtmeldingen" aria-label="Buurtmeldingen" title="Buurtmeldingen"><span aria-hidden="true">!</span></a>
+      <a href="#buurtweer" aria-label="Buurtweer" title="Buurtweer"><span aria-hidden="true">☁</span></a>
+      <a href="#buurtwerkzaamheden" aria-label="Buurtwerkzaamheden" title="Buurtwerkzaamheden"><span aria-hidden="true">◇</span></a>
+      <a href="#buurttips" aria-label="Buurttips" title="Buurttips"><span aria-hidden="true">✓</span></a>
     </nav>
 
     <script src="app.js"></script>
