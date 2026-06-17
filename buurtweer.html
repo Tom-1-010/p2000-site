@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Buurtweer van De Buurtwacht toont regenradar, neerslagverwachting en weerinformatie voor jouw buurt." />
+    <meta name="description" content="Buurtweer van De Buurtwacht toont live weerdata, regenverwachting en weerinformatie voor jouw buurt." />
     <title>Buurtweer - De Buurtwacht</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -27,13 +27,13 @@
           <div>
             <p class="eyebrow dark">Buurtweer</p>
             <h1>Weer in Maassluis</h1>
-            <p>Regen, wind en temperatuur voor de komende uren. Handig voordat je de deur uitgaat.</p>
+            <p id="weatherIntro">Live weerdata wordt geladen. Je ziet zo regen, wind en temperatuur voor de komende uren.</p>
           </div>
           <div class="weather-now-pill plain">
             <div>
               <span>Nu</span>
-              <strong>17°</strong>
-              <p>Bewolkt · wind 4 Bft</p>
+              <strong id="currentTemp">--°</strong>
+              <p id="currentDetails">Weerdata laden...</p>
             </div>
           </div>
         </div>
@@ -42,12 +42,12 @@
           <article class="radar-card natural-card">
             <div class="radar-header natural-header">
               <div>
-                <span>Regenradar</span>
+                <span id="radarStatus">Regenradar</span>
                 <h2>Buien rond Maassluis</h2>
               </div>
-              <button type="button">Komende 60 min</button>
+              <button id="forecastButton" type="button">Live data</button>
             </div>
-            <div class="radar-map natural-map" aria-label="Voorbeeld regenradar rond Maassluis">
+            <div class="radar-map natural-map" aria-label="Regenverwachting rond Maassluis">
               <div class="map-grid"></div>
               <div class="map-land land-one"></div>
               <div class="map-land land-two"></div>
@@ -70,19 +70,19 @@
           <aside class="weather-side natural-side">
             <article class="summary-weather-card simple-card">
               <span>Vandaag</span>
-              <strong>Meestal bewolkt</strong>
-              <p>Later op de avond trekken een paar buien over de regio. Tussendoor zijn er droge momenten.</p>
+              <strong id="todaySummary">Weerdata laden...</strong>
+              <p id="todayText">De verwachting voor Maassluis wordt opgehaald.</p>
               <div class="weather-metrics natural-metrics">
-                <div><b>76%</b><small>kans op regen</small></div>
-                <div><b>4 Bft</b><small>zuidwest</small></div>
-                <div><b>9 km</b><small>zicht</small></div>
+                <div><b id="rainChance">--%</b><small>kans op regen</small></div>
+                <div><b id="windStrength">-- Bft</b><small id="windDirection">wind</small></div>
+                <div><b id="visibilityValue">-- km</b><small>zicht</small></div>
               </div>
             </article>
 
             <article class="warning-card simple-card">
               <span>Advies</span>
-              <strong>Regenjas mee</strong>
-              <p>Vooral tussen 19:15 en 20:00 is de kans op regen groter.</p>
+              <strong id="adviceTitle">Even geduld</strong>
+              <p id="adviceText">We halen de actuele verwachting op.</p>
             </article>
           </aside>
         </section>
@@ -91,27 +91,28 @@
           <div class="section-row compact">
             <div>
               <p class="eyebrow dark">Neerslag</p>
-              <h2 id="rain-title">Komende 2 uur</h2>
+              <h2 id="rain-title">Komende uren</h2>
             </div>
-            <span class="update-label">18:40 bijgewerkt</span>
+            <span id="weatherUpdated" class="update-label">Laden...</span>
           </div>
-          <div class="rain-bars natural-bars" aria-label="Neerslagverwachting per kwartier">
-            <div><span style="height: 18%"></span><small>18:45</small></div>
-            <div><span style="height: 26%"></span><small>19:00</small></div>
-            <div><span style="height: 48%"></span><small>19:15</small></div>
-            <div><span style="height: 82%"></span><small>19:30</small></div>
-            <div><span style="height: 64%"></span><small>19:45</small></div>
-            <div><span style="height: 35%"></span><small>20:00</small></div>
-            <div><span style="height: 14%"></span><small>20:15</small></div>
-            <div><span style="height: 8%"></span><small>20:30</small></div>
+          <div id="rainBars" class="rain-bars natural-bars" aria-label="Neerslagverwachting">
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
+            <div><span style="height: 10%"></span><small>--:--</small></div>
           </div>
+          <p id="apiNotice" class="api-notice" hidden></p>
         </section>
 
-        <section class="forecast-section natural-forecast" aria-label="Weerverwachting per uur">
-          <article class="forecast-card"><span>19:00</span><strong>17°</strong><p>lichte regen</p></article>
-          <article class="forecast-card active"><span>20:00</span><strong>16°</strong><p>regen</p></article>
-          <article class="forecast-card"><span>21:00</span><strong>15°</strong><p>droger</p></article>
-          <article class="forecast-card"><span>22:00</span><strong>15°</strong><p>bewolkt</p></article>
+        <section id="hourlyForecast" class="forecast-section natural-forecast" aria-label="Weerverwachting per uur">
+          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
+          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
+          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
+          <article class="forecast-card"><span>--:--</span><strong>--°</strong><p>laden</p></article>
         </section>
 
         <section class="daily-section natural-card" aria-labelledby="daily-title">
@@ -121,12 +122,12 @@
               <h2 id="daily-title">Komende dagen</h2>
             </div>
           </div>
-          <div class="daily-list natural-list">
-            <article><span>Vandaag</span><strong>17° / 12°</strong><p>Buien in de avond</p></article>
-            <article><span>Morgen</span><strong>19° / 13°</strong><p>Af en toe zon</p></article>
-            <article><span>Woensdag</span><strong>21° / 14°</strong><p>Meestal droog</p></article>
-            <article><span>Donderdag</span><strong>18° / 12°</strong><p>Kans op regen</p></article>
-            <article><span>Vrijdag</span><strong>20° / 13°</strong><p>Rustig weer</p></article>
+          <div id="dailyList" class="daily-list natural-list">
+            <article><span>Vandaag</span><strong>--° / --°</strong><p>laden</p></article>
+            <article><span>Morgen</span><strong>--° / --°</strong><p>laden</p></article>
+            <article><span>Dag 3</span><strong>--° / --°</strong><p>laden</p></article>
+            <article><span>Dag 4</span><strong>--° / --°</strong><p>laden</p></article>
+            <article><span>Dag 5</span><strong>--° / --°</strong><p>laden</p></article>
           </div>
         </section>
       </section>
@@ -142,5 +143,6 @@
     </nav>
 
     <script src="app.js"></script>
+    <script src="weather.js"></script>
   </body>
 </html>
