@@ -3,29 +3,83 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>P2000 Maasregio</title>
+    <meta
+      name="description"
+      content="112indewijk is een overzichtelijk buurtplatform voor P2000-meldingen, veiligheidsupdates en praktische informatie in de wijk."
+    />
+    <title>112indewijk - Meldingen in jouw buurt</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">P2000 overzicht</p>
-        <h1>Live meldingen Maasregio</h1>
-      </div>
-      <div class="topbar-status" aria-label="Systeemstatus">
-        <span class="status-dot"></span>
-        <span>Online</span>
-      </div>
+    <header class="site-header">
+      <nav class="navbar" aria-label="Hoofdnavigatie">
+        <a class="brand" href="#top" aria-label="112indewijk startpagina">
+          <span class="brand-mark">112</span>
+          <span>
+            <strong>112indewijk</strong>
+            <small>veiligheidsupdates dichtbij</small>
+          </span>
+        </a>
+
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainMenu">
+          Menu
+        </button>
+
+        <div class="nav-links" id="mainMenu">
+          <a href="#meldingen">Meldingen</a>
+          <a href="#buurt">Buurtbeeld</a>
+          <a href="#veiligheid">Veiligheid</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
     </header>
 
-    <main class="page-shell">
-      <section class="control-panel" aria-labelledby="filters-title">
-        <div class="section-heading">
-          <h2 id="filters-title">Filters</h2>
-          <p>Toon meldingen per discipline, prioriteit en plaats.</p>
-        </div>
+    <main id="top">
+      <section class="hero-section">
+        <div class="hero-grid page-width">
+          <div class="hero-copy">
+            <p class="label">Buurtplatform voor meldingen en veiligheid</p>
+            <h1>Bekijk wat er speelt in jouw wijk.</h1>
+            <p class="hero-text">
+              112indewijk bundelt recente P2000-meldingen, buurtinformatie en praktische veiligheidstips in één rustige en duidelijke omgeving.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#meldingen">Bekijk meldingen</a>
+              <a class="button secondary" href="#veiligheid">Veiligheidstips</a>
+            </div>
+          </div>
 
+          <aside class="hero-card" aria-label="Actuele status">
+            <div class="status-line">
+              <span class="live-dot"></span>
+              <span>Voorbeeldweergave actief</span>
+            </div>
+            <h2>Maasregio</h2>
+            <p>Maassluis, Vlaardingen, Schiedam, Rozenburg, Maasland en omgeving.</p>
+            <dl class="quick-stats">
+              <div>
+                <dt>Vandaag</dt>
+                <dd id="heroTotal">0 meldingen</dd>
+              </div>
+              <div>
+                <dt>Hoogste prio</dt>
+                <dd id="heroPriority">Geen</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page-width search-panel" aria-labelledby="zoek-title">
+        <div>
+          <p class="label">Zoeken in de buurt</p>
+          <h2 id="zoek-title">Filter meldingen</h2>
+        </div>
         <div class="filter-grid">
+          <label>
+            Plaats of wijk
+            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis, Centrum of Haven" />
+          </label>
           <label>
             Discipline
             <select id="disciplineFilter">
@@ -35,7 +89,6 @@
               <option value="politie">Politie</option>
             </select>
           </label>
-
           <label>
             Prioriteit
             <select id="priorityFilter">
@@ -45,49 +98,115 @@
               <option value="P3">P3</option>
             </select>
           </label>
-
-          <label>
-            Plaats
-            <input id="cityFilter" type="search" placeholder="Bijv. Maassluis" />
-          </label>
         </div>
       </section>
 
-      <section class="summary-grid" aria-label="Samenvatting">
-        <article class="summary-card">
-          <span class="summary-label">Totaal</span>
+      <section class="page-width stats-row" aria-label="Samenvatting meldingen">
+        <article class="stat-card">
+          <span>Getoond</span>
           <strong id="totalCount">0</strong>
         </article>
-        <article class="summary-card urgent">
-          <span class="summary-label">P1 meldingen</span>
+        <article class="stat-card urgent">
+          <span>P1 meldingen</span>
           <strong id="p1Count">0</strong>
         </article>
-        <article class="summary-card">
-          <span class="summary-label">Laatste update</span>
+        <article class="stat-card">
+          <span>Laatste update</span>
           <strong id="lastUpdate">--:--</strong>
+        </article>
+        <article class="stat-card">
+          <span>Meest actief</span>
+          <strong id="activeArea">-</strong>
         </article>
       </section>
 
-      <section class="content-grid">
-        <section class="card" aria-labelledby="meldingen-title">
-          <div class="section-heading compact">
-            <h2 id="meldingen-title">Meldingen</h2>
-            <p>Recente alarmeringen in overzichtelijke volgorde.</p>
+      <section class="page-width content-layout" id="meldingen">
+        <section class="panel feed-panel" aria-labelledby="meldingen-title">
+          <div class="section-title-row">
+            <div>
+              <p class="label">Live overzicht</p>
+              <h2 id="meldingen-title">Recente meldingen</h2>
+            </div>
+            <span class="subtle-badge">Demo data</span>
           </div>
           <div id="messagesList" class="messages-list"></div>
         </section>
 
-        <aside class="card detail-card" aria-labelledby="details-title">
-          <div class="section-heading compact">
-            <h2 id="details-title">Details</h2>
-            <p>Selecteer een melding voor meer informatie.</p>
+        <aside class="panel detail-panel" aria-labelledby="details-title">
+          <div class="section-title-row compact">
+            <div>
+              <p class="label">Melding</p>
+              <h2 id="details-title">Details</h2>
+            </div>
           </div>
           <div id="messageDetails" class="message-details empty-state">
-            Geen melding geselecteerd.
+            Selecteer een melding om details te bekijken.
           </div>
         </aside>
       </section>
+
+      <section class="page-width neighbourhood-section" id="buurt">
+        <div class="section-heading-center">
+          <p class="label">Buurtbeeld</p>
+          <h2>Wat speelt er in de omgeving?</h2>
+          <p>Een compact overzicht voor bewoners die snel willen zien welke soort meldingen in de buurt voorkomen.</p>
+        </div>
+        <div id="neighbourhoodGrid" class="neighbourhood-grid"></div>
+      </section>
+
+      <section class="safety-section" id="veiligheid">
+        <div class="page-width">
+          <div class="section-heading-center light">
+            <p class="label">Praktische informatie</p>
+            <h2>Veilig blijven zonder paniek</h2>
+            <p>112indewijk is informatief. Bel bij direct gevaar altijd 112.</p>
+          </div>
+          <div class="safety-grid">
+            <article class="safety-card">
+              <span class="card-kicker">Spoed</span>
+              <h3>Bel 112 bij direct gevaar</h3>
+              <p>Bij brand, levensgevaar, heterdaad of een medische noodsituatie bel je altijd direct 112.</p>
+            </article>
+            <article class="safety-card">
+              <span class="card-kicker">Geen spoed</span>
+              <h3>Gebruik de juiste route</h3>
+              <p>Geen direct gevaar? Gebruik het reguliere nummer van politie, gemeente of zorgverlener.</p>
+            </article>
+            <article class="safety-card">
+              <span class="card-kicker">Buurt</span>
+              <h3>Let op, maar ga niet hinderen</h3>
+              <p>Blijf op afstand van hulpdiensten en deel geen herkenbare beelden van slachtoffers.</p>
+            </article>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer" id="contact">
+      <div class="page-width footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#top">
+            <span class="brand-mark">112</span>
+            <span>
+              <strong>112indewijk</strong>
+              <small>veiligheidsupdates dichtbij</small>
+            </span>
+          </a>
+          <p>Een rustig buurtplatform voor meldingen, duiding en praktische veiligheidsinformatie.</p>
+        </div>
+        <div>
+          <h2>Let op</h2>
+          <p>Deze versie gebruikt voorbeelddata. Er is nog geen live P2000-feed gekoppeld.</p>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="mobile-tabbar" aria-label="Mobiele navigatie">
+      <a href="#top">Home</a>
+      <a href="#meldingen">Meldingen</a>
+      <a href="#buurt">Buurt</a>
+      <a href="#veiligheid">Info</a>
+    </nav>
 
     <script src="app.js"></script>
   </body>
