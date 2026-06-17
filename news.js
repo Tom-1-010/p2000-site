@@ -141,6 +141,29 @@ function relevanceScore(item) {
   return score;
 }
 
+function normalizeItem(item, feed) {
+  const rawTitle = item.title || 'Geen titel';
+  const description = stripHtml(item.description || item.content || item.summary || '').slice(0, 220);
+  const link = item.link || item.guid || '#';
+  const source = item.source || item.author || extractSource(rawTitle, feed.label);
+  const publishedAt = item.pubDate || item.published || item.updated || new Date().toISOString();
+
+  const normalized = {
+    id: `${feed.id}-${link || rawTitle}`,
+    title: cleanTitle(rawTitle),
+    description,
+    link,
+    source,
+    category: feed.category,
+    feedLabel: feed.label,
+    publishedAt: new Date(publishedAt).toISOString(),
+    loadedFrom: feed.url,
+  };
+
+  normalized.score = relevanceScore(normalized);
+  return normalized;
+}
+
 function getText(parent, selectors) {
   for (const selector of selectors) {
     const node = parent.querySelector(selector);
@@ -149,11 +172,11 @@ function getText(parent, selectors) {
   return '';
 }
 
-function getLink(item) {
-  const directLink = item.querySelector('link')?.textContent?.trim();
+function getLink(entry) {
+  const directLink = entry.querySelector('link')?.textContent?.trim();
   if (directLink) return directLink;
 
-  const atomLink = item.querySelector('link[href]')?.getAttribute('href');
+  const atomLink = entry.querySelector('link[href]')?.getAttribute('href');
   return atomLink || '#';
 }
 
@@ -165,28 +188,13 @@ function parseFeedXml(xmlText, feed) {
     throw new Error(`Ongeldige RSS XML voor ${feed.label}`);
   }
 
-  return [...xml.querySelectorAll('item, entry')].map((entry) => {
-    const rawTitle = getText(entry, ['title']);
-    const rawDescription = getText(entry, ['description', 'summary', 'content']);
-    const pubDate = getText(entry, ['pubDate', 'published', 'updated']);
-    const link = getLink(entry);
-    const source = getText(entry, ['source']) || extractSource(rawTitle, feed.label);
-
-    const item = {
-      id: `${feed.id}-${link || rawTitle}`,
-      title: cleanTitle(rawTitle),
-      description: stripHtml(rawDescription).slice(0, 220),
-      link,
-      source,
-      category: feed.category,
-      feedLabel: feed.label,
-      publishedAt: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
-      loadedFrom: feed.url,
-    };
-
-    item.score = relevanceScore(item);
-    return item;
-  });
+  return [...xml.querySelectorAll('item, entry')].map((entry) => normalizeItem({
+    title: getText(entry, ['title']),
+    description: getText(entry, ['description', 'summary', 'content']),
+    pubDate: getText(entry, ['pubDate', 'published', 'updated']),
+    link: getLink(entry),
+    source: getText(entry, ['source']) || undefined,
+  }, feed));
 }
 
 function uniqueItems(items) {
@@ -200,37 +208,78 @@ function uniqueItems(items) {
   });
 }
 
-function proxiedUrls(url) {
+function proxiedXmlUrls(url) {
   return [
-    url,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
     `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
   ];
 }
 
-async function fetchTextWithFallback(url) {
+function rssJsonUrls(url) {
+  return [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`,
+  ];
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+async function fetchText(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.text();
+}
+
+async function loadFeedViaJson(feed) {
   let lastError;
 
-  for (const candidate of proxiedUrls(url)) {
+  for (const url of rssJsonUrls(feed.url)) {
     try {
-      const response = await fetch(candidate, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const text = await response.text();
-      if (!text || !text.trim()) throw new Error('Lege RSS-response');
-
-      return text;
+      const data = await fetchJson(url);
+      if (data.status && data.status !== 'ok') throw new Error(data.message || 'RSS2JSON gaf geen ok-status');
+      if (!Array.isArray(data.items) || !data.items.length) throw new Error('RSS2JSON gaf geen items terug');
+      return data.items.map((item) => normalizeItem(item, feed));
     } catch (error) {
       lastError = error;
     }
   }
 
-  throw lastError || new Error('RSS niet bereikbaar');
+  throw lastError || new Error('RSS2JSON niet bereikbaar');
+}
+
+async function loadFeedViaXmlProxy(feed) {
+  let lastError;
+
+  for (const url of proxiedXmlUrls(feed.url)) {
+    try {
+      const text = await fetchText(url);
+      if (!text || !text.trim()) throw new Error('Lege proxy-response');
+
+      if (url.includes('allorigins.win/get')) {
+        const wrapped = JSON.parse(text);
+        if (!wrapped.contents) throw new Error('AllOrigins gaf geen contents terug');
+        return parseFeedXml(wrapped.contents, feed);
+      }
+
+      return parseFeedXml(text, feed);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('XML-proxy niet bereikbaar');
 }
 
 async function loadFeed(feed) {
-  const xmlText = await fetchTextWithFallback(feed.url);
-  return parseFeedXml(xmlText, feed);
+  try {
+    return await loadFeedViaJson(feed);
+  } catch (jsonError) {
+    console.warn(`RSS2JSON mislukt voor ${feed.label}:`, jsonError);
+    return loadFeedViaXmlProxy(feed);
+  }
 }
 
 function setLoadingState(isLoading) {
@@ -259,7 +308,7 @@ function renderSources(successfulFeeds = []) {
 
     return `
       <li>
-        <span>${active ? 'Actief' : 'Fallback'}</span>
+        <span>${active ? 'Actief' : 'Niet geladen'}</span>
         <strong>${escapeHtml(feed.label)}</strong>
         <small>${escapeHtml(feed.category)}</small>
       </li>
@@ -362,7 +411,7 @@ async function loadNews() {
     if (elements.status) elements.status.textContent = 'RSS niet bereikbaar';
     if (elements.updated) elements.updated.textContent = 'Geen feed kon worden geladen.';
     if (elements.list) {
-      elements.list.innerHTML = '<div class="error-news">RSS-feeds konden niet worden geladen. Dit komt meestal door CORS of een tijdelijke blokkade van de feed/proxy.</div>';
+      elements.list.innerHTML = '<div class="error-news">RSS-feeds konden niet worden geladen. Dit komt meestal doordat Google News of de publieke RSS-proxy tijdelijk blokkeert. Voor productie is een eigen serverless RSS-endpoint betrouwbaarder.</div>';
     }
     renderTopStory([]);
     return;
