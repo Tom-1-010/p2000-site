@@ -346,6 +346,7 @@ function renderList() {
 
     return `
       <article class="works-item ${workClass}${isFeatured ? ' is-featured' : ''}">
+        ${isFeatured ? '<div class="works-latest-label">Laatste bericht</div>' : ''}
         <div class="works-item-header">
           <div>
             <span class="works-item-source">${escapeHtml(item.feedLabel)}</span>
