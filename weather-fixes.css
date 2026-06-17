@@ -1,0 +1,12 @@
+body[data-page="buurtweer"] .weather-big-temp {
+  letter-spacing: .015em !important;
+  font-variant-numeric: tabular-nums !important;
+  font-feature-settings: "tnum" 1;
+  margin-left: 0 !important;
+}
+
+@media (max-width: 430px) {
+  body[data-page="buurtweer"] .weather-big-temp {
+    letter-spacing: .02em !important;
+  }
+}
