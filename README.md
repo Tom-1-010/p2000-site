@@ -1,36 +1,29 @@
-# 112indewijk
+# De Buurtwacht
 
-Mobielvriendelijk buurtplatform voor P2000-meldingen en veiligheidsinformatie.
+Algemene mobielvriendelijke homepage voor een buurtplatform.
 
 ## Opzet
 
 De site bestaat uit gewone HTML, CSS en JavaScript:
 
-- `index.html` - pagina-opbouw, navigatie, hero, meldingen, buurtbeeld en informatieblokken
-- `styles.css` - volledige responsive styling voor desktop en mobiel
-- `app.js` - P2000 RSS-feed, fallbackdata, filters, detailpaneel, buurtstatistieken en mobiel menu
+- `index.html` - algemene homepage met merknaam, hero, functiekaarten en icon-only ondermenu
+- `styles.css` - volledige responsive styling met grijze, rustige buurtplatform-uitstraling
+- `app.js` - kleine interactielaag voor actieve staat van het ondermenu
 
-## P2000-feed
+## Onderin menu
 
-De site probeert P2000-data te laden via:
+Het vaste ondermenu gebruikt alleen iconen. De items zijn toegankelijk via `aria-label` en `title`:
 
-```text
-http://p2000.brandweer-berkel-enschot.nl/homeassistant/rss.asp
-```
-
-Omdat deze feed via HTTP loopt en een statische HTTPS-site dit kan blokkeren, gebruikt de frontend op HTTPS eerst een proxy-url via AllOrigins. Als de live feed of proxy niet werkt, valt de site automatisch terug op voorbeelddata.
-
-## Filters
-
-De frontend ondersteunt filters op:
-
-- stad, plaats, wijk of meldingstekst
-- discipline: brandweer, ambulance, politie of overig
-- prioriteit: P1, P2 of P3
+- MijnBuurt
+- Buurtnieuws
+- Buurtmeldingen
+- Buurtweer
+- Buurtwerkzaamheden
+- Buurttips
 
 ## Belangrijk
 
-Dit is een statische frontend. Er is nog geen eigen backend, database, kaart, login of officiële P2000-provider gekoppeld.
+Deze versie is een statische homepage. Er is geen backend, database, live P2000-feed, kaart, login of route-systeem gekoppeld.
 
 ## Lokaal bekijken
 
