@@ -1,14 +1,27 @@
 # De Buurtwacht
 
-Algemene mobielvriendelijke homepage voor een buurtplatform.
+Algemene mobielvriendelijke meerpagina-site voor een buurtplatform.
+
+## Pagina's
+
+- `index.html` - algemene homepage
+- `mijnbuurt.html` - MijnBuurt
+- `buurtnieuws.html` - Buurtnieuws
+- `buurtmeldingen.html` - Buurtmeldingen
+- `buurtweer.html` - Buurtweer
+- `buurtwerkzaamheden.html` - Buurtwerkzaamheden
+- `buurttips.html` - Buurttips
 
 ## Opzet
 
 De site bestaat uit gewone HTML, CSS en JavaScript:
 
-- `index.html` - algemene homepage met merknaam, hero, functiekaarten en icon-only ondermenu
-- `styles.css` - volledige responsive styling met grijze, rustige buurtplatform-uitstraling
-- `app.js` - kleine interactielaag voor actieve staat van het ondermenu
+- `styles.css` - responsive styling, vaste ondernavigatie en icon styles
+- `app.js` - markeert de actieve ondermenu-knop op basis van de huidige pagina
+
+## Iconen
+
+De iconen zijn in één uniforme lijnstijl verwerkt als inline/CSS SVG-maskers. De gekozen stijl is gebaseerd op Lucide Icons. Lucide is openbaar beschikbaar en uitgebracht onder de ISC-licentie. Sommige Lucide-iconen zijn afgeleid van Feather en vallen onder MIT.
 
 ## Onderin menu
 
@@ -23,7 +36,7 @@ Het vaste ondermenu gebruikt alleen iconen. De items zijn toegankelijk via `aria
 
 ## Belangrijk
 
-Deze versie is een statische homepage. Er is geen backend, database, live P2000-feed, kaart, login of route-systeem gekoppeld.
+Deze versie is statisch. Er is geen backend, database, live P2000-feed, kaart, login of router gekoppeld.
 
 ## Lokaal bekijken
 
